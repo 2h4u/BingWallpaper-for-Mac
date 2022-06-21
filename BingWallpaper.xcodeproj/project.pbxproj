@@ -7,19 +7,38 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C1313BE2861A429006E0A29 /* ImageDescriptionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1313BD2861A429006E0A29 /* ImageDescriptionHandler.swift */; };
+		2C1313C02861AAC9006E0A29 /* WallpaperManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1313BF2861AAC9006E0A29 /* WallpaperManager.swift */; };
+		2C1313C22861B128006E0A29 /* UpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1313C12861B128006E0A29 /* UpdateManager.swift */; };
+		2C1313C42861C8FB006E0A29 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1313C32861C8FB006E0A29 /* Settings.swift */; };
+		2C8F896B2860EDB20017CC6C /* DownloadResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8F896A2860EDB20017CC6C /* DownloadResponse.swift */; };
 		2C9C7C2628603C6900F846FD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9C7C2528603C6900F846FD /* AppDelegate.swift */; };
-		2C9C7C2828603C6900F846FD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9C7C2728603C6900F846FD /* ViewController.swift */; };
 		2C9C7C2A28603C6B00F846FD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2C9C7C2928603C6B00F846FD /* Assets.xcassets */; };
 		2C9C7C2D28603C6B00F846FD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C9C7C2B28603C6B00F846FD /* Main.storyboard */; };
+		2CA439D1286189260015AE45 /* FileHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA439D0286189260015AE45 /* FileHandler.swift */; };
+		2CDDC10A2861E25500351010 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CDDC1092861E25500351010 /* ServiceManagement.framework */; };
+		2CEDEC402860D9E10096B707 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEDEC3F2860D9E10096B707 /* DownloadManager.swift */; };
+		2CEDEC422860DD180096B707 /* ImageDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEDEC412860DD180096B707 /* ImageDescriptor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2C1313BD2861A429006E0A29 /* ImageDescriptionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDescriptionHandler.swift; sourceTree = "<group>"; };
+		2C1313BF2861AAC9006E0A29 /* WallpaperManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperManager.swift; sourceTree = "<group>"; };
+		2C1313C12861B128006E0A29 /* UpdateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateManager.swift; sourceTree = "<group>"; };
+		2C1313C32861C8FB006E0A29 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		2C8F896A2860EDB20017CC6C /* DownloadResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadResponse.swift; sourceTree = "<group>"; };
 		2C9C7C2228603C6900F846FD /* BingWallpaper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BingWallpaper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C9C7C2528603C6900F846FD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		2C9C7C2728603C6900F846FD /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		2C9C7C2928603C6B00F846FD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2C9C7C2C28603C6B00F846FD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2C9C7C2E28603C6B00F846FD /* BingWallpaper.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BingWallpaper.entitlements; sourceTree = "<group>"; };
+		2C9C7C3428603DA800F846FD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		2CA439D0286189260015AE45 /* FileHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHandler.swift; sourceTree = "<group>"; };
+		2CA439D52861920B0015AE45 /* Async.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Async.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2CDDC1092861E25500351010 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
+		2CEDEC3F2860D9E10096B707 /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
+		2CEDEC412860DD180096B707 /* ImageDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDescriptor.swift; sourceTree = "<group>"; };
+		9AF86FA1319AE46B42748077 /* Pods_BingWallpaper.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BingWallpaper.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -27,6 +46,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2CDDC10A2861E25500351010 /* ServiceManagement.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -38,6 +58,7 @@
 			children = (
 				2C9C7C2428603C6900F846FD /* BingWallpaper */,
 				2C9C7C2328603C6900F846FD /* Products */,
+				3AFC96D856560F45210A2ED9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -52,13 +73,31 @@
 		2C9C7C2428603C6900F846FD /* BingWallpaper */ = {
 			isa = PBXGroup;
 			children = (
+				2C9C7C3428603DA800F846FD /* Info.plist */,
 				2C9C7C2528603C6900F846FD /* AppDelegate.swift */,
-				2C9C7C2728603C6900F846FD /* ViewController.swift */,
 				2C9C7C2928603C6B00F846FD /* Assets.xcassets */,
 				2C9C7C2B28603C6B00F846FD /* Main.storyboard */,
 				2C9C7C2E28603C6B00F846FD /* BingWallpaper.entitlements */,
+				2CEDEC3F2860D9E10096B707 /* DownloadManager.swift */,
+				2CEDEC412860DD180096B707 /* ImageDescriptor.swift */,
+				2C8F896A2860EDB20017CC6C /* DownloadResponse.swift */,
+				2CA439D0286189260015AE45 /* FileHandler.swift */,
+				2C1313BD2861A429006E0A29 /* ImageDescriptionHandler.swift */,
+				2C1313BF2861AAC9006E0A29 /* WallpaperManager.swift */,
+				2C1313C12861B128006E0A29 /* UpdateManager.swift */,
+				2C1313C32861C8FB006E0A29 /* Settings.swift */,
 			);
 			path = BingWallpaper;
+			sourceTree = "<group>";
+		};
+		3AFC96D856560F45210A2ED9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2CDDC1092861E25500351010 /* ServiceManagement.framework */,
+				2CA439D52861920B0015AE45 /* Async.framework */,
+				9AF86FA1319AE46B42748077 /* Pods_BingWallpaper.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -131,8 +170,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2C9C7C2828603C6900F846FD /* ViewController.swift in Sources */,
+				2CEDEC402860D9E10096B707 /* DownloadManager.swift in Sources */,
+				2CEDEC422860DD180096B707 /* ImageDescriptor.swift in Sources */,
+				2CA439D1286189260015AE45 /* FileHandler.swift in Sources */,
+				2C1313C42861C8FB006E0A29 /* Settings.swift in Sources */,
+				2C1313C02861AAC9006E0A29 /* WallpaperManager.swift in Sources */,
 				2C9C7C2628603C6900F846FD /* AppDelegate.swift in Sources */,
+				2C1313BE2861A429006E0A29 /* ImageDescriptionHandler.swift in Sources */,
+				2C8F896B2860EDB20017CC6C /* DownloadResponse.swift in Sources */,
+				2C1313C22861B128006E0A29 /* UpdateManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,12 +315,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = BingWallpaper/BingWallpaper.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LQTRRP9Q8X;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BingWallpaper/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
@@ -282,7 +330,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.2h4u.BingWallpaper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -296,12 +344,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = BingWallpaper/BingWallpaper.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LQTRRP9Q8X;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BingWallpaper/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
@@ -309,7 +359,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.2h4u.BingWallpaper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
