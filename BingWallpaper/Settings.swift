@@ -5,12 +5,12 @@ class Settings {
 
   private let defaults = UserDefaults.standard
 
-  var test: Bool {
+  var launchAtLogin: Bool {
     get {
       return defaults.bool(forKey: Settings.SM_LOGIN_ENABLED)
     }
     set {
-      SMLoginItemSetEnabled(Bundle.main.bundleURL.path as CFString, newValue)
+      SMLoginItemSetEnabled("com.2h4u.BingWallpaperHelper" as CFString, newValue)
       defaults.set(newValue, forKey: Settings.SM_LOGIN_ENABLED)
     }
   }
