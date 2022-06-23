@@ -11,10 +11,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   private let menuController = MenuController()
 
   func applicationDidFinishLaunching(_ aNotification: Notification) {
+    let wallpaperManager = WallpaperManager()
+
     menuController.createMenu()
+    menuController.wallpaperManager = wallpaperManager
+
     FileHandler.createWallpaperFolderIfNeeded()
-    updateManager.start()
+
+    updateManager.wallpaperManager = wallpaperManager
     updateManager.delegate = menuController
+    updateManager.start()
+
     killBingWallpaperHelperIfNeeded()
   }
 

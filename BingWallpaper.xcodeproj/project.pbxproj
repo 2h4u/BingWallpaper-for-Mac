@@ -11,6 +11,10 @@
 		2C1313C02861AAC9006E0A29 /* WallpaperManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1313BF2861AAC9006E0A29 /* WallpaperManager.swift */; };
 		2C1313C22861B128006E0A29 /* UpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1313C12861B128006E0A29 /* UpdateManager.swift */; };
 		2C1313C42861C8FB006E0A29 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1313C32861C8FB006E0A29 /* Settings.swift */; };
+		2C35BAC5286360B5009F8556 /* MenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C35BAC4286360B5009F8556 /* MenuController.swift */; };
+		2C4D65C02864C3AB00878CED /* CollectionExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4D65BF2864C3AB00878CED /* CollectionExtensions.swift */; };
+		2C6577D92862271400868EBA /* ImageSelectorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C6577D82862271400868EBA /* ImageSelectorView.xib */; };
+		2C6577DB286227F200868EBA /* ImageSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6577DA286227F200868EBA /* ImageSelectorView.swift */; };
 		2C67D53A2861EBDE00F82659 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C67D5392861EBDE00F82659 /* AppDelegate.swift */; };
 		2C67D5412861EBE000F82659 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C67D53F2861EBE000F82659 /* Main.storyboard */; };
 		2C67D5482861ED2700F82659 /* BingWallpaperHelper.app in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2C67D5372861EBDE00F82659 /* BingWallpaperHelper.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -42,6 +46,10 @@
 		2C1313BF2861AAC9006E0A29 /* WallpaperManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperManager.swift; sourceTree = "<group>"; };
 		2C1313C12861B128006E0A29 /* UpdateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateManager.swift; sourceTree = "<group>"; };
 		2C1313C32861C8FB006E0A29 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		2C35BAC4286360B5009F8556 /* MenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuController.swift; sourceTree = "<group>"; };
+		2C4D65BF2864C3AB00878CED /* CollectionExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionExtensions.swift; sourceTree = "<group>"; };
+		2C6577D82862271400868EBA /* ImageSelectorView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ImageSelectorView.xib; sourceTree = "<group>"; };
+		2C6577DA286227F200868EBA /* ImageSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSelectorView.swift; sourceTree = "<group>"; };
 		2C67D5372861EBDE00F82659 /* BingWallpaperHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BingWallpaperHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C67D5392861EBDE00F82659 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2C67D5402861EBE000F82659 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -81,6 +89,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2C6577DC2862286D00868EBA /* ImageSelectorView */ = {
+			isa = PBXGroup;
+			children = (
+				2C6577D82862271400868EBA /* ImageSelectorView.xib */,
+				2C6577DA286227F200868EBA /* ImageSelectorView.swift */,
+			);
+			path = ImageSelectorView;
+			sourceTree = "<group>";
+		};
 		2C67D5382861EBDE00F82659 /* BingWallpaperHelper */ = {
 			isa = PBXGroup;
 			children = (
@@ -127,6 +144,9 @@
 				2C1313BF2861AAC9006E0A29 /* WallpaperManager.swift */,
 				2C1313C12861B128006E0A29 /* UpdateManager.swift */,
 				2C1313C32861C8FB006E0A29 /* Settings.swift */,
+				2C6577DC2862286D00868EBA /* ImageSelectorView */,
+				2C35BAC4286360B5009F8556 /* MenuController.swift */,
+				2C4D65BF2864C3AB00878CED /* CollectionExtensions.swift */,
 			);
 			path = BingWallpaper;
 			sourceTree = "<group>";
@@ -229,6 +249,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C6577D92862271400868EBA /* ImageSelectorView.xib in Resources */,
 				2C9C7C2A28603C6B00F846FD /* Assets.xcassets in Resources */,
 				2C9C7C2D28603C6B00F846FD /* Main.storyboard in Resources */,
 			);
@@ -250,9 +271,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				2CEDEC402860D9E10096B707 /* DownloadManager.swift in Sources */,
+				2C4D65C02864C3AB00878CED /* CollectionExtensions.swift in Sources */,
 				2CEDEC422860DD180096B707 /* ImageDescriptor.swift in Sources */,
 				2CA439D1286189260015AE45 /* FileHandler.swift in Sources */,
+				2C6577DB286227F200868EBA /* ImageSelectorView.swift in Sources */,
 				2C1313C42861C8FB006E0A29 /* Settings.swift in Sources */,
+				2C35BAC5286360B5009F8556 /* MenuController.swift in Sources */,
 				2C1313C02861AAC9006E0A29 /* WallpaperManager.swift in Sources */,
 				2C9C7C2628603C6900F846FD /* AppDelegate.swift in Sources */,
 				2C1313BE2861A429006E0A29 /* ImageDescriptionHandler.swift in Sources */,

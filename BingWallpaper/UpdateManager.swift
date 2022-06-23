@@ -1,29 +1,39 @@
 import Foundation
 
-class UpdateManager {
-  private var wallpaperManager = WallpaperManager()
+protocol UpdateManagerDelegate {
+  func imagesUpdated(descriptors: [ImageDescriptor])
+}
 
-  func setup() {
-    wallpaperManager.setupObserver()
+class UpdateManager {
+  var wallpaperManager: WallpaperManager?
+  var delegate: UpdateManagerDelegate?
+
+  func start() {
     doUpdate(withDelay: 0)
   }
 
   func doUpdate(withDelay: Int) {
     DispatchQueue.global().asyncAfter(deadline: .now().advanced(by: DispatchTimeInterval.seconds(withDelay))) { [weak self] in
-      let descriptors = ImageDescriptionHandler.downloadImageDescriptors(numberOfImages: 5)
+      var descriptors = ImageDescriptionHandler.downloadImageDescriptors(numberOfImages: 5)
 
-      for var descriptor in descriptors {
+      descriptors = descriptors.map { descriptor in
+        var descriptor = descriptor
         if ImageDescriptionHandler.isSavedToDisk(descriptor: descriptor) {
-          continue
+          descriptor.image = ImageDescriptionHandler.loadImageFromDisk(descriptor: descriptor)
+          return descriptor
         }
 
         descriptor.image = ImageDescriptionHandler.downloadImage(descriptor: descriptor)
         ImageDescriptionHandler.saveToDisk(descriptor: &descriptor)
+        return descriptor
       }
 
-      if let newestDescriptor = descriptors.sorted(by: { desc1, desc2 in desc1.startDate > desc2.startDate }).first {
-        self?.wallpaperManager.setWallpaper(descriptor: newestDescriptor)
-        self?.wallpaperManager.updateWallpaperIfNeeded()
+      DispatchQueue.main.async {
+        self?.delegate?.imagesUpdated(descriptors: descriptors)
+      }
+
+      if let newestDescriptor = ImageDescriptionHandler.newest(descriptors: descriptors) {
+        self?.wallpaperManager?.setWallpaper(descriptor: newestDescriptor)
       }
 
       self?.doUpdate(withDelay: 3600 * 12)

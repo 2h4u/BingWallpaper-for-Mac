@@ -31,17 +31,15 @@ class FileHandler {
     }
   }
 
-  static func saveImageToDisk(image: NSImage, toUrl: URL) -> Bool {
+  static func saveImageToDisk(image: NSImage, toUrl: URL) {
     guard let tiffRepresentation = image.tiffRepresentation,
           let bitmap = NSBitmapImageRep(data: tiffRepresentation),
-          let imageData = bitmap.representation(using: .jpeg, properties: [:]) else { return false }
+          let imageData = bitmap.representation(using: .jpeg, properties: [:]) else { return }
 
     do {
       try imageData.write(to: toUrl, options: .withoutOverwriting)
-      return true
     } catch {
       print("Failed to save image to disk with error:\n\(error)")
-      return false
     }
   }
 

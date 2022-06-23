@@ -2,7 +2,6 @@ import Cocoa
 import Foundation
 
 class DownloadManager {
-
   static func downloadJson(numberOfImages: Int) -> [String: Any] {
     let response = downloadData(from: URL(string: "https://www.bing.com/HPImageArchive.aspx?format=js&n=\(numberOfImages)")!)
 
@@ -35,7 +34,6 @@ class DownloadManager {
   }
 
   static func downloadImage(from url: URL) -> NSImage? {
-    print("Download Started")
     let response = downloadData(from: url)
     if let error = response.error {
       print(error)

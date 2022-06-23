@@ -1,7 +1,7 @@
-import Foundation
 import AppKit
+import Foundation
 
-struct ImageDescriptor {
+struct ImageDescriptor: Equatable {
   let startDate: String
   let endDate: String
   let url: String
@@ -12,7 +12,7 @@ struct ImageDescriptor {
     return URL(string: "https://www.bing.com" + url.replacingOccurrences(of: "1920x1080", with: "UHD"))!
   }
 
-  mutating func deleteImageFromMemory() {
-    image = nil
+  static func == (lhs: Self, rhs: Self) -> Bool {
+    return lhs.startDate == rhs.startDate
   }
 }

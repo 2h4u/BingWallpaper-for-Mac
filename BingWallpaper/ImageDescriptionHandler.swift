@@ -1,8 +1,7 @@
-import Foundation
 import Cocoa
+import Foundation
 
 class ImageDescriptionHandler {
-
   static func downloadImage(descriptor: ImageDescriptor) -> NSImage? {
     return DownloadManager.downloadImage(from: descriptor.imageUrl())
   }
@@ -32,11 +31,7 @@ class ImageDescriptionHandler {
 
   static func saveToDisk(descriptor: inout ImageDescriptor) {
     guard let image = descriptor.image else { return }
-    let success = FileHandler.saveImageToDisk(image: image, toUrl: imageDownloadPath(descriptor: descriptor))
-
-    if success {
-      descriptor.deleteImageFromMemory()
-    }
+    FileHandler.saveImageToDisk(image: image, toUrl: imageDownloadPath(descriptor: descriptor))
   }
 
   static func isSavedToDisk(descriptor: ImageDescriptor) -> Bool {
@@ -54,5 +49,9 @@ class ImageDescriptionHandler {
     }
 
     return nil
+  }
+
+  static func newest(descriptors: [ImageDescriptor]) -> ImageDescriptor? {
+    return descriptors.sorted(by: { desc1, desc2 in desc1.startDate > desc2.startDate }).first
   }
 }
