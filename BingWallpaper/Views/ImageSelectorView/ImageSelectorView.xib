@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="20037" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="20037"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="ImageSelectorView" customModule="BingWallpaper" customModuleProvider="target">
+            <connections>
+                <outlet property="containerView" destination="c22-O7-iKe" id="T0o-qH-bNx"/>
+                <outlet property="imageView" destination="pvm-NY-3Be" id="cTr-GY-ftr"/>
+                <outlet property="leftButton" destination="xNH-fV-tjO" id="YwV-sP-PHG"/>
+                <outlet property="rightButton" destination="iPX-1j-tkX" id="uJO-eB-Ziw"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="c22-O7-iKe">
+            <rect key="frame" x="0.0" y="0.0" width="300" height="145"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <subviews>
+                <button translatesAutoresizingMaskIntoConstraints="NO" id="iPX-1j-tkX">
+                    <rect key="frame" x="280" y="-2" width="15.5" height="146"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="15" id="frZ-XI-TlH"/>
+                    </constraints>
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="chevron.compact.right" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="Xr3-WW-7B9">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                </button>
+                <button translatesAutoresizingMaskIntoConstraints="NO" id="xNH-fV-tjO">
+                    <rect key="frame" x="5" y="-2" width="15.5" height="146"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="15" id="oex-DG-jTD"/>
+                    </constraints>
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="UTA-K4-mCX">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                        <imageReference key="image" image="chevron.compact.left" catalog="system" symbolScale="medium"/>
+                    </buttonCell>
+                </button>
+                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="pvm-NY-3Be">
+                    <rect key="frame" x="25" y="-4.5" width="250.5" height="150"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="pvm-NY-3Be" secondAttribute="height" multiplier="16:9" id="WZH-J1-0y0"/>
+                    </constraints>
+                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" id="8jh-ka-59Q">
+                        <imageReference key="image" image="photo.fill" catalog="system" symbolScale="large"/>
+                    </imageCell>
+                </imageView>
+            </subviews>
+            <constraints>
+                <constraint firstItem="pvm-NY-3Be" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="4" id="1Ap-t0-voO"/>
+                <constraint firstAttribute="bottom" secondItem="xNH-fV-tjO" secondAttribute="bottom" id="43L-WV-Q9G"/>
+                <constraint firstAttribute="trailing" secondItem="iPX-1j-tkX" secondAttribute="trailing" constant="5" id="4RB-7i-jdU"/>
+                <constraint firstAttribute="bottom" secondItem="pvm-NY-3Be" secondAttribute="bottom" id="8RY-cY-50w"/>
+                <constraint firstItem="iPX-1j-tkX" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="4" id="Mte-0T-BFr"/>
+                <constraint firstAttribute="bottom" secondItem="iPX-1j-tkX" secondAttribute="bottom" id="QwU-H8-hlD"/>
+                <constraint firstItem="pvm-NY-3Be" firstAttribute="leading" secondItem="xNH-fV-tjO" secondAttribute="trailing" constant="5" id="T4a-QP-Y6I"/>
+                <constraint firstItem="iPX-1j-tkX" firstAttribute="leading" secondItem="pvm-NY-3Be" secondAttribute="trailing" constant="5" id="W1Z-rf-hKO"/>
+                <constraint firstItem="xNH-fV-tjO" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="4" id="iBN-JK-Aso"/>
+                <constraint firstItem="xNH-fV-tjO" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="5" id="ni2-3b-dub"/>
+            </constraints>
+            <point key="canvasLocation" x="-57" y="25"/>
+        </customView>
+    </objects>
+    <resources>
+        <image name="chevron.compact.left" catalog="system" width="7" height="14"/>
+        <image name="chevron.compact.right" catalog="system" width="7" height="14"/>
+        <image name="photo.fill" catalog="system" width="24" height="18"/>
+    </resources>
+</document>

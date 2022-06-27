@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="20037" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="20037"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="TextView" customModule="BingWallpaper" customModuleProvider="target">
+            <connections>
+                <outlet property="button" destination="RvF-85-U21" id="Ifs-js-TUA"/>
+                <outlet property="containerView" destination="c22-O7-iKe" id="dqm-yF-RGc"/>
+                <outlet property="copyrightLabel" destination="Pza-Dy-OFt" id="Bsw-eG-7Dq"/>
+                <outlet property="descriptionLabel" destination="Ol4-gz-8Zl" id="gti-nF-ZFt"/>
+                <outlet property="visualEffectView" destination="9hr-Vo-njB" id="okB-EX-cRi"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="c22-O7-iKe">
+            <rect key="frame" x="0.0" y="0.0" width="488" height="95"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
+            <subviews>
+                <visualEffectView blendingMode="behindWindow" material="appearanceBased" state="followsWindowActiveState" translatesAutoresizingMaskIntoConstraints="NO" id="9hr-Vo-njB">
+                    <rect key="frame" x="5" y="0.0" width="478" height="90"/>
+                </visualEffectView>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ol4-gz-8Zl">
+                    <rect key="frame" x="23" y="75" width="442" height="16"/>
+                    <textFieldCell key="cell" title="Multiline Label" id="aD5-Kr-95l">
+                        <font key="font" usesAppearanceFont="YES"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pza-Dy-OFt">
+                    <rect key="frame" x="23" y="57" width="442" height="16"/>
+                    <textFieldCell key="cell" title="Label" id="4e9-XE-Z7n">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="tertiaryLabelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <button autoresizesSubviews="NO" verticalHuggingPriority="750" id="RvF-85-U21">
+                    <rect key="frame" x="0.0" y="0.0" width="488" height="95"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <buttonCell key="cell" type="square" title="Button" bezelStyle="shadowlessSquare" alignment="center" transparent="YES" imageScaling="proportionallyDown" inset="2" id="BJC-5J-eqM">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                </button>
+            </subviews>
+            <constraints>
+                <constraint firstItem="Pza-Dy-OFt" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="25" id="4it-Pl-NTi"/>
+                <constraint firstItem="Ol4-gz-8Zl" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="25" id="5sz-oh-2Fn"/>
+                <constraint firstAttribute="trailing" secondItem="9hr-Vo-njB" secondAttribute="trailing" constant="5" id="61v-Zq-1qJ"/>
+                <constraint firstAttribute="bottom" secondItem="Pza-Dy-OFt" secondAttribute="bottom" constant="4" id="8aH-lv-637"/>
+                <constraint firstItem="9hr-Vo-njB" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="5" id="FdI-bF-2J3"/>
+                <constraint firstItem="RvF-85-U21" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="SFE-Bl-vIq"/>
+                <constraint firstAttribute="trailing" secondItem="RvF-85-U21" secondAttribute="trailing" id="XqY-aM-ThQ"/>
+                <constraint firstAttribute="bottom" secondItem="9hr-Vo-njB" secondAttribute="bottom" id="Zwf-Za-yxM"/>
+                <constraint firstItem="Ol4-gz-8Zl" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="9" id="aA0-eR-NIW"/>
+                <constraint firstAttribute="trailing" secondItem="Pza-Dy-OFt" secondAttribute="trailing" constant="25" id="h4p-nW-I1F"/>
+                <constraint firstItem="Pza-Dy-OFt" firstAttribute="top" secondItem="Ol4-gz-8Zl" secondAttribute="bottom" constant="2" id="rWI-Lx-yMW"/>
+                <constraint firstAttribute="trailing" secondItem="Ol4-gz-8Zl" secondAttribute="trailing" constant="25" id="ttO-hD-3YQ"/>
+                <constraint firstItem="RvF-85-U21" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" id="tuz-IM-g2d"/>
+                <constraint firstItem="9hr-Vo-njB" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="5" id="uKU-Ow-FTc"/>
+                <constraint firstAttribute="bottom" secondItem="RvF-85-U21" secondAttribute="bottom" id="uax-YV-82v"/>
+            </constraints>
+            <point key="canvasLocation" x="144" y="536.5"/>
+        </customView>
+    </objects>
+</document>

@@ -13,14 +13,15 @@ class MenuController: NSObject {
     statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
 
     if let button = statusItem.button {
-      button.image = NSImage(systemSymbolName: "1.circle", accessibilityDescription: "1")
+      button.image = NSImage(systemSymbolName: "photo", accessibilityDescription: "BingWallpaper")
     }
 
     menu = NSMenu()
+    menu.delegate = self
     menu.minimumWidth = 300
 
     let imageItem = NSMenuItem(title: "", action: nil, keyEquivalent: "")
-    imageSelectorView = ImageSelectorView(frame: NSRect(x: 0, y: 0, width: menu.size.width, height: imageSelectorViewHeight(menu: menu)))
+    imageSelectorView = ImageSelectorView(frame: CGRect(x: 0, y: 0, width: menu.size.width, height: imageSelectorViewHeight(menu: menu)))
     imageSelectorView.leftButton.action = #selector(MenuController.imageSelectorViewLeftButtonAction)
     imageSelectorView.leftButton.target = self
     imageSelectorView.rightButton.action = #selector(MenuController.imageSelectorViewRightButtonAction)
@@ -58,6 +59,7 @@ class MenuController: NSObject {
 
     selectedDescriptorIndex = selectedDescriptorIndex - 1
     updateSelectedImage(newSelectedDescriptorIndex: selectedDescriptorIndex)
+    updateImageSelectorView(newSelectedDescriptorIndex: selectedDescriptorIndex)
   }
 
   @objc func imageSelectorViewRightButtonAction(_ sender: NSButton) {
@@ -67,27 +69,60 @@ class MenuController: NSObject {
 
     selectedDescriptorIndex = selectedDescriptorIndex + 1
     updateSelectedImage(newSelectedDescriptorIndex: selectedDescriptorIndex)
+    updateImageSelectorView(newSelectedDescriptorIndex: selectedDescriptorIndex)
+  }
+
+  @objc func textItemAction(sender: NSMenuItem) {
+    if let descriptor = descriptors[safe: selectedDescriptorIndex] {
+      NSWorkspace.shared.open(descriptor.copyrightUrl())
+    }
   }
 
   private func imageSelectorViewHeight(menu: NSMenu) -> CGFloat {
-    let outerPadding = 12.0
-    let buttonWidth = 12.0
-    let innerPadding = 8.0
+    let outerPadding = 5.0
+    let buttonWidth = 15.0
+    let innerPadding = 5.0
     let imageViewWidth = menu.size.width - outerPadding*2 - buttonWidth*2 - innerPadding*2
-    return imageViewWidth / 16*9
+    let topMargin = 4.0
+    return imageViewWidth / 16*9 + topMargin
   }
 
   private func updateSelectedImage(newSelectedDescriptorIndex: Int) {
     if let descriptor = descriptors[safe: newSelectedDescriptorIndex] {
       wallpaperManager?.setWallpaper(descriptor: descriptor)
     }
-    updateImageSelectorView(newSelectedDescriptorIndex: newSelectedDescriptorIndex)
   }
 
   private func updateImageSelectorView(newSelectedDescriptorIndex: Int) {
-    imageSelectorView.imageView.image = descriptors[safe: newSelectedDescriptorIndex]?.image
+    let descriptor = descriptors[safe: newSelectedDescriptorIndex]
+    imageSelectorView.imageView.image = descriptor?.image
+
+    let textItem = NSMenuItem(title: "", action: nil, keyEquivalent: "")
+    textItem.tag = 7
+    let textView = TextView(frame: CGRect(x: 0, y: 0, width: menu.size.width, height: 0))
+    textView.descriptionLabel.stringValue = getDescription(description: descriptor?.description)
+    textView.copyrightLabel.stringValue = getCopyright(description: descriptor?.description)
+    textView.button.action = #selector(textItemAction)
+    textView.button.target = self
+    textItem.view = textView
+
+    if let oldTextItem = menu.item(withTag: 7) {
+      menu.removeItem(oldTextItem)
+    }
+    menu.insertItem(textItem, at: 1)
+
     imageSelectorView.leftButton.isEnabled = descriptors.indices.contains(newSelectedDescriptorIndex - 1)
     imageSelectorView.rightButton.isEnabled = descriptors.indices.contains(newSelectedDescriptorIndex + 1)
+  }
+
+  private func getDescription(description: String?) -> String {
+    if description == nil { return "" }
+    return String(description?.split(separator: "(").first ?? "")
+  }
+
+  private func getCopyright(description: String?) -> String {
+    if description == nil { return "" }
+    return description?.split(separator: "(").last?.replacingOccurrences(of: ")", with: "") ?? ""
   }
 }
 
@@ -96,5 +131,11 @@ extension MenuController: UpdateManagerDelegate {
     self.descriptors = descriptors.sorted(by: { desc1, desc2 in desc1.startDate < desc2.startDate })
     selectedDescriptorIndex = self.descriptors.firstIndex(where: { $0 == self.descriptors.last }) ?? self.descriptors.endIndex
     updateSelectedImage(newSelectedDescriptorIndex: selectedDescriptorIndex)
+  }
+}
+
+extension MenuController: NSMenuDelegate {
+  func menuNeedsUpdate(_ menu: NSMenu) {
+    updateImageSelectorView(newSelectedDescriptorIndex: selectedDescriptorIndex)
   }
 }

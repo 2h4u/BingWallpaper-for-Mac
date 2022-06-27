@@ -24,6 +24,8 @@
 		2C9C7C2D28603C6B00F846FD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C9C7C2B28603C6B00F846FD /* Main.storyboard */; };
 		2CA439D1286189260015AE45 /* FileHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA439D0286189260015AE45 /* FileHandler.swift */; };
 		2CDDC10A2861E25500351010 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CDDC1092861E25500351010 /* ServiceManagement.framework */; };
+		2CEB95EF2869A34D00C75D8B /* TextView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CEB95EE2869A34D00C75D8B /* TextView.xib */; };
+		2CEB95F12869A36400C75D8B /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEB95F02869A36400C75D8B /* TextView.swift */; };
 		2CEDEC402860D9E10096B707 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEDEC3F2860D9E10096B707 /* DownloadManager.swift */; };
 		2CEDEC422860DD180096B707 /* ImageDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEDEC412860DD180096B707 /* ImageDescriptor.swift */; };
 /* End PBXBuildFile section */
@@ -65,6 +67,8 @@
 		2CA439D0286189260015AE45 /* FileHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHandler.swift; sourceTree = "<group>"; };
 		2CA439D52861920B0015AE45 /* Async.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Async.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2CDDC1092861E25500351010 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
+		2CEB95EE2869A34D00C75D8B /* TextView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextView.xib; sourceTree = "<group>"; };
+		2CEB95F02869A36400C75D8B /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
 		2CEDEC3F2860D9E10096B707 /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		2CEDEC412860DD180096B707 /* ImageDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDescriptor.swift; sourceTree = "<group>"; };
 		9AF86FA1319AE46B42748077 /* Pods_BingWallpaper.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BingWallpaper.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -144,11 +148,29 @@
 				2C1313BF2861AAC9006E0A29 /* WallpaperManager.swift */,
 				2C1313C12861B128006E0A29 /* UpdateManager.swift */,
 				2C1313C32861C8FB006E0A29 /* Settings.swift */,
-				2C6577DC2862286D00868EBA /* ImageSelectorView */,
+				2CEB95F32869E6DD00C75D8B /* Views */,
 				2C35BAC4286360B5009F8556 /* MenuController.swift */,
 				2C4D65BF2864C3AB00878CED /* CollectionExtensions.swift */,
 			);
 			path = BingWallpaper;
+			sourceTree = "<group>";
+		};
+		2CEB95F22869A36900C75D8B /* TextView */ = {
+			isa = PBXGroup;
+			children = (
+				2CEB95EE2869A34D00C75D8B /* TextView.xib */,
+				2CEB95F02869A36400C75D8B /* TextView.swift */,
+			);
+			path = TextView;
+			sourceTree = "<group>";
+		};
+		2CEB95F32869E6DD00C75D8B /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				2C6577DC2862286D00868EBA /* ImageSelectorView */,
+				2CEB95F22869A36900C75D8B /* TextView */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		3AFC96D856560F45210A2ED9 /* Frameworks */ = {
@@ -250,6 +272,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2C6577D92862271400868EBA /* ImageSelectorView.xib in Resources */,
+				2CEB95EF2869A34D00C75D8B /* TextView.xib in Resources */,
 				2C9C7C2A28603C6B00F846FD /* Assets.xcassets in Resources */,
 				2C9C7C2D28603C6B00F846FD /* Main.storyboard in Resources */,
 			);
@@ -273,6 +296,7 @@
 				2CEDEC402860D9E10096B707 /* DownloadManager.swift in Sources */,
 				2C4D65C02864C3AB00878CED /* CollectionExtensions.swift in Sources */,
 				2CEDEC422860DD180096B707 /* ImageDescriptor.swift in Sources */,
+				2CEB95F12869A36400C75D8B /* TextView.swift in Sources */,
 				2CA439D1286189260015AE45 /* FileHandler.swift in Sources */,
 				2C6577DB286227F200868EBA /* ImageSelectorView.swift in Sources */,
 				2C1313C42861C8FB006E0A29 /* Settings.swift in Sources */,
@@ -501,7 +525,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.1.1;
+				MARKETING_VERSION = 0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.2h4u.BingWallpaper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -530,7 +554,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.1.1;
+				MARKETING_VERSION = 0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.2h4u.BingWallpaper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

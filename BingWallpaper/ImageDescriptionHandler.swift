@@ -14,7 +14,7 @@ class ImageDescriptionHandler {
     }
 
     let imageDescriptors = images.map { image -> ImageDescriptor in
-      ImageDescriptor(startDate: image["startdate"] as! String, endDate: image["enddate"] as! String, url: image["url"] as! String, description: image["copyrightlink"] as! String)
+      ImageDescriptor(startDate: image["startdate"] as! String, endDate: image["enddate"] as! String, url: image["url"] as! String, description: image["copyright"] as! String, copyrightLink: image["copyrightlink"] as! String)
     }
 
     return imageDescriptors
