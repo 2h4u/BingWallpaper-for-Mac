@@ -20,19 +20,19 @@
             <rect key="frame" x="0.0" y="0.0" width="488" height="95"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
             <subviews>
-                <visualEffectView blendingMode="behindWindow" material="appearanceBased" state="followsWindowActiveState" translatesAutoresizingMaskIntoConstraints="NO" id="9hr-Vo-njB">
+                <visualEffectView blendingMode="behindWindow" material="selection" state="followsWindowActiveState" translatesAutoresizingMaskIntoConstraints="NO" id="9hr-Vo-njB">
                     <rect key="frame" x="5" y="0.0" width="478" height="90"/>
                 </visualEffectView>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ol4-gz-8Zl">
-                    <rect key="frame" x="23" y="75" width="442" height="16"/>
+                <textField verticalHuggingPriority="751" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Ol4-gz-8Zl">
+                    <rect key="frame" x="23" y="70" width="442" height="16"/>
                     <textFieldCell key="cell" title="Multiline Label" id="aD5-Kr-95l">
                         <font key="font" usesAppearanceFont="YES"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pza-Dy-OFt">
-                    <rect key="frame" x="23" y="57" width="442" height="16"/>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Pza-Dy-OFt">
+                    <rect key="frame" x="23" y="4" width="442" height="64"/>
                     <textFieldCell key="cell" title="Label" id="4e9-XE-Z7n">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="tertiaryLabelColor" catalog="System" colorSpace="catalog"/>
