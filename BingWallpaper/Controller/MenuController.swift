@@ -4,10 +4,10 @@ class MenuController: NSObject {
   private var statusItem: NSStatusItem!
   private var menu: NSMenu!
   private let settings = Settings()
-  private var descriptors = [ImageDescriptor]()
+  private var descriptors = [ImageDescriptorOld]()
   private var selectedDescriptorIndex = 0
   private var imageSelectorView: ImageSelectorView!
-  var wallpaperManager: WallpaperManager?
+  var updateManager: UpdateManager?
 
   func createMenu() {
     statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
@@ -31,25 +31,27 @@ class MenuController: NSObject {
 
     menu.addItem(NSMenuItem.separator())
 
-    let launchAtLogin = NSMenuItem(title: "Launch at login", action: #selector(launchAtLogin), keyEquivalent: "")
-    launchAtLogin.state = settings.launchAtLogin ? .on : .off
-    launchAtLogin.representedObject = settings.launchAtLogin
-    launchAtLogin.target = self
-    menu.addItem(launchAtLogin)
+    let refreshItem = NSMenuItem(title: "Refresh", action: #selector(refresh), keyEquivalent: "")
+    refreshItem.target = self
+    menu.addItem(refreshItem)
 
     menu.addItem(NSMenuItem.separator())
+
+    let launchAtLoginItem = NSMenuItem(title: "Settings", action: #selector(showSettingsWc), keyEquivalent: "")
+    launchAtLoginItem.target = self
+    menu.addItem(launchAtLoginItem)
 
     menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
 
     statusItem.menu = menu
   }
 
-  @objc func launchAtLogin(atLogin sender: NSMenuItem) {
-    let oldState = sender.representedObject as! Bool
-    let newState = !oldState
-    settings.launchAtLogin = newState
-    sender.representedObject = newState
-    sender.state = newState ? .on : .off
+  @objc func showSettingsWc(sender: NSMenuItem) {
+    SettingsWc.instance().showWindow(self)
+  }
+
+  @objc func refresh(sender: NSMenuItem) {
+    updateManager?.update()
   }
 
   @objc func imageSelectorViewLeftButtonAction(_ sender: NSButton) {
@@ -89,7 +91,7 @@ class MenuController: NSObject {
 
   private func updateSelectedImage(newSelectedDescriptorIndex: Int) {
     if let descriptor = descriptors[safe: newSelectedDescriptorIndex] {
-      wallpaperManager?.setWallpaper(descriptor: descriptor)
+      WallpaperManager.shared.setWallpaper(descriptor: descriptor)
     }
   }
 
@@ -127,7 +129,7 @@ class MenuController: NSObject {
 }
 
 extension MenuController: UpdateManagerDelegate {
-  func imagesUpdated(descriptors: [ImageDescriptor]) {
+  func imagesUpdated(descriptors: [ImageDescriptorOld]) {
     self.descriptors = descriptors.sorted(by: { desc1, desc2 in desc1.startDate < desc2.startDate })
     selectedDescriptorIndex = self.descriptors.firstIndex(where: { $0 == self.descriptors.last }) ?? self.descriptors.endIndex
     updateSelectedImage(newSelectedDescriptorIndex: selectedDescriptorIndex)

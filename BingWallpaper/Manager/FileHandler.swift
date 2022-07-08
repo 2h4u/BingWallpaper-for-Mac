@@ -2,7 +2,7 @@ import AppKit
 import Foundation
 
 class FileHandler {
-  static func picturesDirectory() -> String {
+  static func usersPictureDirectory() -> String {
     guard let picturesDirectory = NSSearchPathForDirectoriesInDomains(.picturesDirectory, .userDomainMask, true).first else {
       print("Couldn't find picture directory of user")
       return FileManager.default.homeDirectoryForCurrentUser.path
@@ -11,16 +11,16 @@ class FileHandler {
     return picturesDirectory
   }
 
-  static func bingWallpaperDirectory() -> String {
-    return picturesDirectory() + "/bing-wallpapers/"
+  static func defaultBingWallpaperDirectory() -> String {
+    return usersPictureDirectory() + "/bing-wallpapers/"
   }
 
-  static func bingWallpaperDirectory() -> URL {
-    return URL(fileURLWithPath: bingWallpaperDirectory(), isDirectory: true)
+  static func defaultBingWallpaperDirectory() -> URL {
+    return URL(fileURLWithPath: defaultBingWallpaperDirectory(), isDirectory: true)
   }
 
   static func createWallpaperFolderIfNeeded() {
-    let bingDir: String = bingWallpaperDirectory()
+    let bingDir: String = Settings().imageDownloadPath.path
 
     if FileManager.default.fileExists(atPath: bingDir) { return }
 
@@ -45,7 +45,7 @@ class FileHandler {
 
   static func getSavedImages() -> [URL] {
     do {
-      return try FileManager.default.contentsOfDirectory(at: bingWallpaperDirectory(), includingPropertiesForKeys: nil, options: FileManager.DirectoryEnumerationOptions.skipsHiddenFiles)
+      return try FileManager.default.contentsOfDirectory(at: Settings().imageDownloadPath, includingPropertiesForKeys: nil, options: FileManager.DirectoryEnumerationOptions.skipsHiddenFiles)
     } catch {
       print(error)
       return []

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
+        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="20037"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -678,6 +680,101 @@
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="75" y="0.0"/>
+        </scene>
+        <!--Window Controller-->
+        <scene sceneID="tZx-Mi-aU0">
+            <objects>
+                <windowController storyboardIdentifier="SettingsWc" id="yLj-wM-rc3" customClass="SettingsWc" customModule="BingWallpaper" customModuleProvider="target" sceneMemberID="viewController">
+                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="NIj-dN-g5T">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+                        <rect key="contentRect" x="425" y="462" width="480" height="270"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1415"/>
+                        <view key="contentView" id="KiJ-hU-skr">
+                            <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </view>
+                        <connections>
+                            <outlet property="delegate" destination="yLj-wM-rc3" id="kEL-pj-xxB"/>
+                        </connections>
+                    </window>
+                    <connections>
+                        <segue destination="use-oq-evN" kind="relationship" relationship="window.shadowedContentViewController" id="5DS-dT-9hd"/>
+                    </connections>
+                </windowController>
+                <customObject id="3c3-7S-hE8" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="113" y="480"/>
+        </scene>
+        <!--Settings Vc-->
+        <scene sceneID="JSD-Fe-dqA">
+            <objects>
+                <viewController id="use-oq-evN" customClass="SettingsVc" customModule="BingWallpaper" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="FR1-81-dt4">
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BwE-uB-V9Y">
+                                <rect key="frame" x="180" y="221" width="119" height="18"/>
+                                <buttonCell key="cell" type="check" title="Launch at login" bezelStyle="regularSquare" imagePosition="left" inset="2" id="hyy-Bv-s93">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <color key="bezelColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                <connections>
+                                    <action selector="launchAtLoginAction:" target="use-oq-evN" id="WOo-Ll-rXr"/>
+                                </connections>
+                            </button>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="ReV-lz-ePN">
+                                <rect key="frame" x="159" y="186" width="163" height="20"/>
+                                <subviews>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jLa-xO-k3i">
+                                        <rect key="frame" x="-2" y="2" width="97" height="16"/>
+                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Image location:" id="NQl-wS-gWX">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oVI-hQ-pSs">
+                                        <rect key="frame" x="94" y="-7" width="76" height="32"/>
+                                        <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="C5m-xP-ecl">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="imagePathButtonAction:" target="use-oq-evN" id="taY-mf-H28"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="jLa-xO-k3i" firstAttribute="leading" secondItem="ReV-lz-ePN" secondAttribute="leading" id="5NN-mC-lkz"/>
+                                    <constraint firstItem="oVI-hQ-pSs" firstAttribute="leading" secondItem="jLa-xO-k3i" secondAttribute="trailing" constant="8" id="656-Ja-RP1"/>
+                                    <constraint firstAttribute="bottom" secondItem="oVI-hQ-pSs" secondAttribute="bottom" id="6Rx-va-NVR"/>
+                                    <constraint firstItem="jLa-xO-k3i" firstAttribute="centerY" secondItem="ReV-lz-ePN" secondAttribute="centerY" id="8SF-66-0Gh"/>
+                                    <constraint firstItem="oVI-hQ-pSs" firstAttribute="top" secondItem="ReV-lz-ePN" secondAttribute="top" id="UVx-oK-B1m"/>
+                                    <constraint firstItem="oVI-hQ-pSs" firstAttribute="centerY" secondItem="ReV-lz-ePN" secondAttribute="centerY" id="Wbz-xS-2qz"/>
+                                    <constraint firstAttribute="trailing" secondItem="oVI-hQ-pSs" secondAttribute="trailing" id="j8g-Nd-5Ix"/>
+                                </constraints>
+                            </customView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="ReV-lz-ePN" secondAttribute="trailing" constant="16" id="6HA-Gp-UHb"/>
+                            <constraint firstItem="BwE-uB-V9Y" firstAttribute="top" secondItem="FR1-81-dt4" secondAttribute="top" constant="32" id="7IT-jU-Uqz"/>
+                            <constraint firstItem="ReV-lz-ePN" firstAttribute="centerX" secondItem="FR1-81-dt4" secondAttribute="centerX" id="C2B-oY-fLe"/>
+                            <constraint firstItem="BwE-uB-V9Y" firstAttribute="centerX" secondItem="FR1-81-dt4" secondAttribute="centerX" id="F55-Oa-A17"/>
+                            <constraint firstItem="ReV-lz-ePN" firstAttribute="top" secondItem="BwE-uB-V9Y" secondAttribute="bottom" constant="16" id="P3U-ko-ucN"/>
+                            <constraint firstItem="ReV-lz-ePN" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="FR1-81-dt4" secondAttribute="leading" constant="16" id="tX7-yH-ZlG"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="imagePathButton" destination="oVI-hQ-pSs" id="BCV-gD-1Yk"/>
+                        <outlet property="launchAtLoginCheckBox" destination="BwE-uB-V9Y" id="WG2-Rd-Jgv"/>
+                    </connections>
+                </viewController>
+                <customObject id="tPE-WC-dK0" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="819" y="470"/>
         </scene>
     </scenes>
 </document>

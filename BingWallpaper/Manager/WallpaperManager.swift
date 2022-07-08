@@ -2,9 +2,10 @@ import AppKit
 import Foundation
 
 class WallpaperManager {
-  private var imageDescriptor: ImageDescriptor?
+  private var imageDescriptor: ImageDescriptorOld?
+  static let shared = WallpaperManager()
 
-  init() {
+  private init() {
     setupObserver()
   }
 
@@ -21,7 +22,7 @@ class WallpaperManager {
     updateWallpaperIfNeeded()
   }
 
-  func setWallpaper(descriptor: ImageDescriptor) {
+  func setWallpaper(descriptor: ImageDescriptorOld) {
     imageDescriptor = descriptor
     updateWallpaperIfNeeded()
   }

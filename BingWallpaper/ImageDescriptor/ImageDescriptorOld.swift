@@ -1,7 +1,7 @@
 import AppKit
 import Foundation
 
-struct ImageDescriptor: Equatable {
+struct ImageDescriptorOld: Equatable {
   let startDate: String
   let endDate: String
   let url: String
