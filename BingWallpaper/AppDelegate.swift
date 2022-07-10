@@ -5,46 +5,26 @@ extension Notification.Name {
   static let killLauncher = Notification.Name("killLauncher")
 }
 
+// TODO: add option for "keep only last X images" and automatically delete old ones from disk
+// TODO: add "don't show menu bar icon"-setting
+// TODO: make sure if app was double clicked, settings view is showing
+// TODO: make sure settings window opens in front
+// TODO: make sure settings window only opens once
+// TODO: create and add icon (app icon and menubar icon)
+
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
   private let menuController = MenuController()
 
   func applicationDidFinishLaunching(_ aNotification: Notification) {
     FileHandler.createWallpaperFolderIfNeeded()
-
-    guard let appDelegate =
-        NSApplication.shared.delegate as? AppDelegate else {
-          return
-      }
-
-      let managedContext =
-        appDelegate.persistentContainer.viewContext
-
-      //2
-      let fetchRequest =
-        NSFetchRequest<ImageDescriptor>(entityName: "ImageDescriptor")
-
-      //3
-      do {
-        let descriptors = try managedContext.fetch(fetchRequest)
-
-        return
-      } catch let error as NSError {
-        print("Could not fetch. \(error), \(error.userInfo)")
-      }
-
-
-//    let json = DownloadManager.downloadJson(numberOfImages: 5)
-//    let descriptors: [ImageDescriptor] = ImageDescriptionHandler.getImageDescriptors(json: json)
-
-    return
-
+    
     let updateManager = UpdateManager()
     updateManager.delegate = menuController
     updateManager.start()
 
     menuController.updateManager = updateManager
-    menuController.createMenu()
+    menuController.setup()
 
     killBingWallpaperHelperIfNeeded()
   }
@@ -125,33 +105,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     })
     return container
   }()
-
-//  lazy var persistentContainer: NSPersistentContainer = {
-//      /*
-//       The persistent container for the application. This implementation
-//       creates and returns a container, having loaded the store for the
-//       application to it. This property is optional since there are legitimate
-//       error conditions that could cause the creation of the store to fail.
-//      */
-//      let container = NSPersistentContainer(name: "DataModel")
-//      container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-//          if let error = error {
-//              // Replace this implementation with code to handle the error appropriately.
-//              // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-//
-//              /*
-//               Typical reasons for an error here include:
-//               * The parent directory does not exist, cannot be created, or disallows writing.
-//               * The persistent store is not accessible, due to permissions or data protection when the device is locked.
-//               * The device is out of space.
-//               * The store could not be migrated to the current model version.
-//               Check the error message to determine what the actual problem was.
-//               */
-//              fatalError("Unresolved error \(error)")
-//          }
-//      })
-//      return container
-//  }()
 
   // MARK: - Core Data Saving and Undo support
 

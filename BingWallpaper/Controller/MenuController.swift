@@ -4,22 +4,40 @@ class MenuController: NSObject {
   private var statusItem: NSStatusItem!
   private var menu: NSMenu!
   private let settings = Settings()
-  private var descriptors = [ImageDescriptorOld]()
+  private var descriptors = [ImageDescriptor]()
   private var selectedDescriptorIndex = 0
   private var imageSelectorView: ImageSelectorView!
   var updateManager: UpdateManager?
-
-  func createMenu() {
-    statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-
+  private static let IMAGE_VIEW_TAG = 6
+  private static let TEXT_VIEW_TAG = 7
+  
+  // MARK: - UI setup
+  
+  func setup() {
+    guard self.statusItem == nil && self.menu == nil else { return }
+    
+    self.statusItem = createStatusBarItem()
+    self.menu = createMenu()
+    self.statusItem.menu = menu
+    
+    imagesUpdated()
+  }
+  
+  private func createStatusBarItem() -> NSStatusItem {
+    let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+    
     if let button = statusItem.button {
       button.image = NSImage(systemSymbolName: "photo", accessibilityDescription: "BingWallpaper")
     }
-
-    menu = NSMenu()
+    
+    return statusItem
+  }
+  
+  private func createMenu() -> NSMenu {
+    let menu = NSMenu()
     menu.delegate = self
     menu.minimumWidth = 300
-
+    
     let imageItem = NSMenuItem(title: "", action: nil, keyEquivalent: "")
     imageSelectorView = ImageSelectorView(frame: CGRect(x: 0, y: 0, width: menu.size.width, height: imageSelectorViewHeight(menu: menu)))
     imageSelectorView.leftButton.action = #selector(MenuController.imageSelectorViewLeftButtonAction)
@@ -27,24 +45,27 @@ class MenuController: NSObject {
     imageSelectorView.rightButton.action = #selector(MenuController.imageSelectorViewRightButtonAction)
     imageSelectorView.rightButton.target = self
     imageItem.view = imageSelectorView
+    imageItem.tag = MenuController.IMAGE_VIEW_TAG
     menu.addItem(imageItem)
-
+    
     menu.addItem(NSMenuItem.separator())
-
+    
     let refreshItem = NSMenuItem(title: "Refresh", action: #selector(refresh), keyEquivalent: "")
     refreshItem.target = self
     menu.addItem(refreshItem)
-
+    
     menu.addItem(NSMenuItem.separator())
-
+    
     let launchAtLoginItem = NSMenuItem(title: "Settings", action: #selector(showSettingsWc), keyEquivalent: "")
     launchAtLoginItem.target = self
     menu.addItem(launchAtLoginItem)
-
+    
     menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
-
-    statusItem.menu = menu
+    
+    return menu
   }
+  
+  // MARK: - IBActions
 
   @objc func showSettingsWc(sender: NSMenuItem) {
     SettingsWc.instance().showWindow(self)
@@ -76,9 +97,11 @@ class MenuController: NSObject {
 
   @objc func textItemAction(sender: NSMenuItem) {
     if let descriptor = descriptors[safe: selectedDescriptorIndex] {
-      NSWorkspace.shared.open(descriptor.copyrightUrl())
+      NSWorkspace.shared.open(descriptor.copyrightUrl)
     }
   }
+  
+  // MARK: - Helper
 
   private func imageSelectorViewHeight(menu: NSMenu) -> CGFloat {
     let outerPadding = 5.0
@@ -100,18 +123,20 @@ class MenuController: NSObject {
     imageSelectorView.imageView.image = descriptor?.image
 
     let textItem = NSMenuItem(title: "", action: nil, keyEquivalent: "")
-    textItem.tag = 7
+    textItem.tag = MenuController.TEXT_VIEW_TAG
     let textView = TextView(frame: CGRect(x: 0, y: 0, width: menu.size.width, height: 0))
-    textView.descriptionLabel.stringValue = getDescription(description: descriptor?.description)
-    textView.copyrightLabel.stringValue = getCopyright(description: descriptor?.description)
+    textView.descriptionLabel.stringValue = getDescription(description: descriptor?.descriptionString)
+    textView.copyrightLabel.stringValue = getCopyright(description: descriptor?.descriptionString)
     textView.button.action = #selector(textItemAction)
     textView.button.target = self
     textItem.view = textView
 
-    if let oldTextItem = menu.item(withTag: 7) {
+    if let oldTextItem = menu.item(withTag: MenuController.TEXT_VIEW_TAG) {
       menu.removeItem(oldTextItem)
     }
-    menu.insertItem(textItem, at: 1)
+    let imageView = menu.item(withTag: MenuController.IMAGE_VIEW_TAG)!
+    let textViewIndex = menu.index(of: imageView) + 1
+    menu.insertItem(textItem, at: textViewIndex)
 
     imageSelectorView.leftButton.isEnabled = descriptors.indices.contains(newSelectedDescriptorIndex - 1)
     imageSelectorView.rightButton.isEnabled = descriptors.indices.contains(newSelectedDescriptorIndex + 1)
@@ -128,9 +153,11 @@ class MenuController: NSObject {
   }
 }
 
+// MARK: - Delegates
+
 extension MenuController: UpdateManagerDelegate {
-  func imagesUpdated(descriptors: [ImageDescriptorOld]) {
-    self.descriptors = descriptors.sorted(by: { desc1, desc2 in desc1.startDate < desc2.startDate })
+  func imagesUpdated() {
+    self.descriptors = ImageDescriptionHandler.imageDescriptorsFromDb()
     selectedDescriptorIndex = self.descriptors.firstIndex(where: { $0 == self.descriptors.last }) ?? self.descriptors.endIndex
     updateSelectedImage(newSelectedDescriptorIndex: selectedDescriptorIndex)
   }

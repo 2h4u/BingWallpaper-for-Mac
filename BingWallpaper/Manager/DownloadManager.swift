@@ -22,6 +22,8 @@ class DownloadManager {
   }
 
   private static func downloadData(from url: URL) -> DownloadResponse {
+    assert(Thread.isMainThread == false)
+    
     let semaphore = DispatchSemaphore(value: 0)
     var response: DownloadResponse!
     URLSession.shared.dataTask(with: url, completionHandler: { data, urlResponse, error in
