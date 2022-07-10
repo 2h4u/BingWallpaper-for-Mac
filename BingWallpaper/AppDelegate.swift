@@ -6,10 +6,10 @@ extension Notification.Name {
 }
 
 // TODO: add option for "keep only last X images" and automatically delete old ones from disk
-// TODO: add "don't show menu bar icon"-setting
 // TODO: make sure if app was double clicked, settings view is showing
 // TODO: make sure settings window opens in front
 // TODO: make sure settings window only opens once
+// TODO: add "don't show menu bar icon"-setting
 // TODO: create and add icon (app icon and menubar icon)
 
 @main
