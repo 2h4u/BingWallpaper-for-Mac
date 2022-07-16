@@ -30,7 +30,6 @@
 		2CEB95EF2869A34D00C75D8B /* TextView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CEB95EE2869A34D00C75D8B /* TextView.xib */; };
 		2CEB95F12869A36400C75D8B /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEB95F02869A36400C75D8B /* TextView.swift */; };
 		2CEDEC402860D9E10096B707 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEDEC3F2860D9E10096B707 /* DownloadManager.swift */; };
-		2CEDEC422860DD180096B707 /* ImageDescriptorOld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEDEC412860DD180096B707 /* ImageDescriptorOld.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -76,7 +75,6 @@
 		2CEB95EE2869A34D00C75D8B /* TextView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextView.xib; sourceTree = "<group>"; };
 		2CEB95F02869A36400C75D8B /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
 		2CEDEC3F2860D9E10096B707 /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
-		2CEDEC412860DD180096B707 /* ImageDescriptorOld.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDescriptorOld.swift; sourceTree = "<group>"; };
 		9AF86FA1319AE46B42748077 /* Pods_BingWallpaper.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BingWallpaper.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -123,7 +121,6 @@
 		2C405AE6286DE37700A14B1A /* ImageDescriptor */ = {
 			isa = PBXGroup;
 			children = (
-				2CEDEC412860DD180096B707 /* ImageDescriptorOld.swift */,
 				2C1313BD2861A429006E0A29 /* ImageDescriptionHandler.swift */,
 				2C989836286DF54C002E5E46 /* ImageDescriptor.swift */,
 			);
@@ -336,7 +333,6 @@
 			files = (
 				2CEDEC402860D9E10096B707 /* DownloadManager.swift in Sources */,
 				2C4D65C02864C3AB00878CED /* CollectionExtensions.swift in Sources */,
-				2CEDEC422860DD180096B707 /* ImageDescriptorOld.swift in Sources */,
 				2CEB95F12869A36400C75D8B /* TextView.swift in Sources */,
 				2CA439D1286189260015AE45 /* FileHandler.swift in Sources */,
 				2C6577DB286227F200868EBA /* ImageSelectorView.swift in Sources */,
