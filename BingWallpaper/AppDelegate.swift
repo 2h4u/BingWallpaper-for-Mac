@@ -5,7 +5,7 @@ extension Notification.Name {
     static let killLauncher = Notification.Name("killLauncher")
 }
 
-// TODO: create and add icon (app icon and menubar icon)
+// TODO: @2h4u create and add icon (app icon and menubar icon)
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {

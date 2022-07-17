@@ -750,8 +750,8 @@
                                 </constraints>
                             </customView>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Nc2-2h-cGg">
-                                <rect key="frame" x="75" y="58" width="123" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Keep last X images:" id="7Kf-YJ-H1X">
+                                <rect key="frame" x="62" y="58" width="136" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Keep images on disk: " id="7Kf-YJ-H1X">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -798,8 +798,8 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="z5t-h5-pAw">
-                                <rect key="frame" x="202" y="135" width="141" height="18"/>
-                                <buttonCell key="cell" type="check" title="Hide MenuBar Icon" bezelStyle="regularSquare" imagePosition="left" inset="2" id="O6r-Lf-eIa">
+                                <rect key="frame" x="202" y="135" width="156" height="18"/>
+                                <buttonCell key="cell" type="check" title="Hide icon at menubar" bezelStyle="regularSquare" imagePosition="left" inset="2" id="O6r-Lf-eIa">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
