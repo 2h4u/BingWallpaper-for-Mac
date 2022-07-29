@@ -1,7 +1,7 @@
 # BingWallpaper
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/4823365/176009354-e8af5049-b849-431e-9308-0b0a131fa2d7.png">
+  <img width="400" alt="screenshot" src="https://user-images.githubusercontent.com/4823365/181782535-6235edf9-5e70-4861-96df-b4e2719482cf.png">
 </p>
 
 BingWallpaper is a menubar app for MacOS which automatically downloads the newest [bing wallpaper of the day](https://www.microsoft.com/bing/bing-wallpaper) 
