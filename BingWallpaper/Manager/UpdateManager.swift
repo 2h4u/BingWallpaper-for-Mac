@@ -1,4 +1,5 @@
 import Foundation
+import AppKit
 
 protocol UpdateManagerDelegate: AnyObject {
     func imagesUpdated()
@@ -12,6 +13,12 @@ class UpdateManager {
     
     func start() {
         assert(Thread.isMainThread)
+        setupObserver()
+        doUpdateOrSetTimer()
+    }
+    
+    private func doUpdateOrSetTimer() {
+        assert(Thread.isMainThread)
         
         let lastUpdate = settings.lastUpdate
         
@@ -20,8 +27,11 @@ class UpdateManager {
             return
         }
         
+        let nextRefreshInterval = refreshInterval - abs(lastUpdate.timeIntervalSinceNow)
+        print("Currently no update necessary, next update at \(Date().addingTimeInterval(nextRefreshInterval))")
+        
         timer = Timer.scheduledTimer(
-            timeInterval: refreshInterval - abs(lastUpdate.timeIntervalSinceNow),
+            timeInterval: nextRefreshInterval,
             target: self,
             selector: #selector(update),
             userInfo: nil,
@@ -38,6 +48,22 @@ class UpdateManager {
         guard let oldestDateStringToKeep = settings.oldestDateStringToKeep() else { return }
         ImageDescriptionHandler.deleteOldDescriptors(oldestDateStringToKeep: oldestDateStringToKeep)
         FileHandler.deleteOldImages(oldestDateStringToKeep: oldestDateStringToKeep)
+    }
+    
+    private func setupObserver() {
+        NSWorkspace.shared.notificationCenter.addObserver(
+            self,
+            selector: #selector(receiveSleepNote),
+            name: NSWorkspace.willSleepNotification,
+            object: nil
+        )
+        
+        NSWorkspace.shared.notificationCenter.addObserver(
+            self,
+            selector: #selector(receiveWakeNote),
+            name: NSWorkspace.didWakeNotification,
+            object: nil
+        )
     }
     
     @objc func update() {
@@ -69,5 +95,13 @@ class UpdateManager {
                 )
             }
         }
+    }
+    
+    @objc func receiveSleepNote(note: NSNotification) {
+        timer?.invalidate()
+    }
+    
+    @objc func receiveWakeNote(note: NSNotification) {
+        doUpdateOrSetTimer()
     }
 }

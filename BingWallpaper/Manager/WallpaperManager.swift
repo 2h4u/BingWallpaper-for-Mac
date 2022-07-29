@@ -10,8 +10,18 @@ class WallpaperManager {
     }
     
     private func setupObserver() {
-        NSWorkspace.shared.notificationCenter.addObserver(self, selector: #selector(WallpaperManager.activeWorkspaceDidChange), name: NSWorkspace.activeSpaceDidChangeNotification, object: nil)
-        NSWorkspace.shared.notificationCenter.addObserver(self, selector: #selector(WallpaperManager.workspaceDidWake), name: NSWorkspace.didWakeNotification, object: nil)
+        NSWorkspace.shared.notificationCenter.addObserver(
+            self,
+            selector: #selector(WallpaperManager.activeWorkspaceDidChange),
+            name: NSWorkspace.activeSpaceDidChangeNotification,
+            object: nil
+        )
+        NSWorkspace.shared.notificationCenter.addObserver(
+            self,
+            selector: #selector(WallpaperManager.workspaceDidWake),
+            name: NSWorkspace.didWakeNotification,
+            object: nil
+        )
     }
     
     @objc func activeWorkspaceDidChange() {
