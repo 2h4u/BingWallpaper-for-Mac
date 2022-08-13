@@ -1,4 +1,4 @@
-# BingWallpaper
+# BingWallpaper for Mac
 
 <p align="center">
   <img width="400" alt="screenshot" src="https://user-images.githubusercontent.com/4823365/181782535-6235edf9-5e70-4861-96df-b4e2719482cf.png">
