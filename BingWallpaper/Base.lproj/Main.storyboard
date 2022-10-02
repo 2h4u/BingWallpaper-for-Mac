@@ -856,6 +856,7 @@
                         <outlet property="hideMenuBarIconCheckBox" destination="z5t-h5-pAw" id="lII-FO-0w1"/>
                         <outlet property="imagePathButton" destination="oVI-hQ-pSs" id="BCV-gD-1Yk"/>
                         <outlet property="keepImagesSlider" destination="g2b-2B-Pe0" id="0GF-Xe-5De"/>
+                        <outlet property="keepImagesTextField" destination="Nc2-2h-cGg" id="06p-1v-lqX"/>
                         <outlet property="launchAtLoginCheckBox" destination="BwE-uB-V9Y" id="WG2-Rd-Jgv"/>
                     </connections>
                 </viewController>

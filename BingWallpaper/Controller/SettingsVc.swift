@@ -10,9 +10,12 @@ class SettingsVc: NSViewController {
     @IBOutlet weak var hideMenuBarIconCheckBox: NSButton!
     @IBOutlet var imagePathButton: NSButton!
     @IBOutlet weak var keepImagesSlider: NSSlider!
+    @IBOutlet weak var keepImagesTextField: NSTextField!
     
     private let settings = Settings()
     weak var delegate: SettingsVcDelegate?
+    
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,7 +24,10 @@ class SettingsVc: NSViewController {
         imagePathButton.title = settings.imageDownloadPath.path
         imagePathButton.toolTip = imagePathButton.title
         keepImagesSlider.integerValue = settings.keepImageDuration
+        setKeepImagesText()
     }
+    
+    // MARK: - Actions
     
     @IBAction func launchAtLoginAction(_ sender: NSButton) {
         let newState = sender.state == .on
@@ -55,6 +61,20 @@ class SettingsVc: NSViewController {
     
     @IBAction func keepImagesSliderAction(_ sender: NSSlider) {
         settings.keepImageDuration = sender.integerValue
+        setKeepImagesText()
+    }
+    
+    // MARK: - Private
+    
+    private func setKeepImagesText() {
+        guard let keepImageDuration = KeepImageDuration(rawValue: settings.keepImageDuration) else { return }
+        
+        switch keepImageDuration {
+        case .five, .ten, .fifty, .onehundred:
+            keepImagesTextField.stringValue = "Keep last \(keepImageDuration.text) images:"
+        case .infinite:
+            keepImagesTextField.stringValue = "Keep all images forever:"
+        }
     }
 }
 
@@ -64,4 +84,19 @@ enum KeepImageDuration: Int {
     case fifty
     case onehundred
     case infinite
+    
+    var text: String {
+        switch self {
+        case .five:
+            return "5"
+        case .ten:
+            return "10"
+        case .fifty:
+            return "50"
+        case .onehundred:
+            return "100"
+        case .infinite:
+            return "∞"
+        }
+    }
 }
