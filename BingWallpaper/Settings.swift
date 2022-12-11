@@ -1,8 +1,10 @@
 import Foundation
 import ServiceManagement
 
-class Settings {
+public class Settings {
     private let defaults = UserDefaults.standard
+    
+    public init() { }
     
     var launchAtLogin: Bool {
         get {
@@ -32,7 +34,7 @@ class Settings {
         }
     }
     
-    var lastUpdate: Date {
+    public var lastUpdate: Date {
         get {
             return defaults.object(forKey: Settings.LAST_UPDATE) as? Date ?? Date.distantPast
         }

@@ -9,7 +9,6 @@ class UpdateManager {
     weak var delegate: UpdateManagerDelegate?
     private let settings = Settings()
     private var timer: Timer?
-    private let refreshInterval: Double = 3600 * 24
     
     func start() {
         assert(Thread.isMainThread)
@@ -20,30 +19,23 @@ class UpdateManager {
     private func doUpdateOrSetTimer() {
         assert(Thread.isMainThread)
         
-        let lastUpdate = settings.lastUpdate
-        
-        if isUpdateNecessary(lastUpdate) {
+        if UpdateScheduleManager.isUpdateNecessary() {
             update()
             return
         }
         
-        let nextRefreshInterval = refreshInterval - abs(lastUpdate.timeIntervalSinceNow)
-        print("Currently no update necessary, next update at \(Date().addingTimeInterval(nextRefreshInterval))")
+        let nextFetchInterval = UpdateScheduleManager.nextFetchTimeInterval()
+        print("Currently no update necessary, next update at \(Date().addingTimeInterval(nextFetchInterval))")
         
         timer = Timer.scheduledTimer(
-            timeInterval: nextRefreshInterval,
+            timeInterval: nextFetchInterval,
             target: self,
             selector: #selector(update),
             userInfo: nil,
             repeats: false
         )
     }
-    
-    private func isUpdateNecessary(_ lastUpdate: Date) -> Bool {
-        return abs(lastUpdate.timeIntervalSinceNow) >= refreshInterval
-        || ImageDescriptionHandler.imageDescriptorsFromDb().isEmpty
-    }
-    
+        
     private func cleanup() {
         guard let oldestDateStringToKeep = settings.oldestDateStringToKeep() else { return }
         ImageDescriptionHandler.deleteOldDescriptors(oldestDateStringToKeep: oldestDateStringToKeep)
@@ -72,7 +64,7 @@ class UpdateManager {
         settings.lastUpdate = Date()
         
         DispatchQueue.global().async {
-            ImageDescriptionHandler.downloadNewestImageDescriptors(maxNumberOfImages: 5)
+            ImageDescriptionHandler.downloadNewestImageDescriptors(maxNumberOfImages: 8)
                 .filter { ImageDescriptionHandler.isSavedToDisk(descriptor: $0) == false }
                 .forEach { descriptor in
                     descriptor.image = ImageDescriptionHandler.downloadImage(descriptor: descriptor)
@@ -83,11 +75,12 @@ class UpdateManager {
                 guard let self = self else { return }
                 self.cleanup()
                 self.delegate?.imagesUpdated()
-                print("Update complete, next update at \(Date().addingTimeInterval(self.refreshInterval))")
+                let fetchInterval = UpdateScheduleManager.nextFetchTimeInterval()
+                print("Update complete, next update at \(Date().addingTimeInterval(fetchInterval))")
                 
                 self.timer?.invalidate()
                 self.timer = Timer.scheduledTimer(
-                    timeInterval: self.refreshInterval,
+                    timeInterval: fetchInterval,
                     target: self,
                     selector: #selector(self.update),
                     userInfo: nil,

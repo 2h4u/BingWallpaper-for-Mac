@@ -48,7 +48,6 @@ class ImageDescriptionHandler {
             .map { $0.startDate }
         
         let imageDescriptors = images
-            .filter { image in preservedStartDates.contains(image["startdate"] as! String) == false }
             .map { image -> ImageDescriptor in
                 let entity = NSEntityDescription.entity(forEntityName: "ImageDescriptor", in: managedContext)!
                 let imageDescriptor = ImageDescriptor(entity: entity, insertInto: managedContext)

@@ -3,7 +3,8 @@ import Foundation
 
 class DownloadManager {
     static func downloadJson(numberOfImages: Int) -> [String: Any] {
-        let response = downloadData(from: URL(string: "https://www.bing.com/HPImageArchive.aspx?format=js&n=\(numberOfImages)")!)
+        // TODO: @2h4u: idx is the start index of the batch of image descriptors that is downloaded, maybe add support for it so more images from the past can be used?
+        let response = downloadData(from: URL(string: "https://www.bing.com/HPImageArchive.aspx?format=js&n=\(numberOfImages)&idx=0")!)
         
         if let error = response.error {
             print(error)
