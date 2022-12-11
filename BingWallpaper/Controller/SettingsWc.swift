@@ -4,6 +4,8 @@ class SettingsWc: NSWindowController {
     
     override func windowDidLoad() {
         super.windowDidLoad()
+        self.window?.title = "BingWallpaper v\(AppUpdateManager.currentAppVersion())"
+        self.window?.titleVisibility = .visible
     }
     
     static func instance() -> SettingsWc {

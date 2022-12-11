@@ -32,6 +32,8 @@
 		2CEDEC402860D9E10096B707 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEDEC3F2860D9E10096B707 /* DownloadManager.swift */; };
 		E534128D291810DB00F91EE0 /* UpdateScheduleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E534128C291810DB00F91EE0 /* UpdateScheduleManager.swift */; };
 		E58DDD51290F8772005E6E03 /* UpdateTimeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58DDD50290F8772005E6E03 /* UpdateTimeTests.swift */; };
+		E5DB8FE32945D97800AF557A /* AppUpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DB8FE22945D97800AF557A /* AppUpdateManager.swift */; };
+		E5DB8FE52945E76800AF557A /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DB8FE42945E76800AF557A /* StringExtensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,6 +93,8 @@
 		E534128C291810DB00F91EE0 /* UpdateScheduleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateScheduleManager.swift; sourceTree = "<group>"; };
 		E58DDD47290F874F005E6E03 /* BingWallpaperTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BingWallpaperTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E58DDD50290F8772005E6E03 /* UpdateTimeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateTimeTests.swift; sourceTree = "<group>"; };
+		E5DB8FE22945D97800AF557A /* AppUpdateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUpdateManager.swift; sourceTree = "<group>"; };
+		E5DB8FE42945E76800AF557A /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,6 +141,7 @@
 				2C1313BF2861AAC9006E0A29 /* WallpaperManager.swift */,
 				2C1313C12861B128006E0A29 /* UpdateManager.swift */,
 				E534128C291810DB00F91EE0 /* UpdateScheduleManager.swift */,
+				E5DB8FE22945D97800AF557A /* AppUpdateManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -158,6 +163,7 @@
 				2C9C7C2E28603C6B00F846FD /* BingWallpaper.entitlements */,
 				2C8F896A2860EDB20017CC6C /* DownloadResponse.swift */,
 				2C4D65BF2864C3AB00878CED /* CollectionExtensions.swift */,
+				E5DB8FE42945E76800AF557A /* StringExtensions.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -399,12 +405,14 @@
 				2C4D65C02864C3AB00878CED /* CollectionExtensions.swift in Sources */,
 				2CEB95F12869A36400C75D8B /* TextView.swift in Sources */,
 				2CA439D1286189260015AE45 /* FileHandler.swift in Sources */,
+				E5DB8FE32945D97800AF557A /* AppUpdateManager.swift in Sources */,
 				2C6577DB286227F200868EBA /* ImageSelectorView.swift in Sources */,
 				2C1313C42861C8FB006E0A29 /* Settings.swift in Sources */,
 				2C35BAC5286360B5009F8556 /* MenuController.swift in Sources */,
 				2C1313C02861AAC9006E0A29 /* WallpaperManager.swift in Sources */,
 				2C405AE3286DD5CA00A14B1A /* SettingsWc.swift in Sources */,
 				2C9C7C2628603C6900F846FD /* AppDelegate.swift in Sources */,
+				E5DB8FE52945E76800AF557A /* StringExtensions.swift in Sources */,
 				2C989837286DF54C002E5E46 /* ImageDescriptor.swift in Sources */,
 				2C1313BE2861A429006E0A29 /* ImageDescriptionHandler.swift in Sources */,
 				2C8F896B2860EDB20017CC6C /* DownloadResponse.swift in Sources */,

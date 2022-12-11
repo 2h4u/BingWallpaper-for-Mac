@@ -22,6 +22,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         menuController.setup()
         
         killBingWallpaperHelperIfNeeded()
+        
+        AppUpdateManager.checkForUpdate()
     }
     
     func applicationDidBecomeActive(_ notification: Notification) {

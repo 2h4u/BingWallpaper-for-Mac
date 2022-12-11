@@ -66,4 +66,31 @@ class FileHandler {
             .filter { $0.lastPathComponent.replacingOccurrences(of: ".jpg", with: "") <= oldestDateStringToKeep }
             .forEach { removeImageFromDisk(imagePath: $0) }
     }
+    
+    static func savePkgInstallerToDisk(pkgInstaller: Data, appVersion: String) -> URL? {
+        let temporaryDirectoryUrl = pkgInstallerPathUrl(appVersion: appVersion)
+        do {
+            try pkgInstaller.write(to: temporaryDirectoryUrl)
+        } catch {
+            print("Failed to save pkg installer to disk with error:\n\(error)")
+            return nil
+        }
+        
+        return temporaryDirectoryUrl
+    }
+    
+    static func pkgInstallerAlreadyDownloaded(appVersion: String) -> URL? {
+        let temporaryDirectoryUrl = pkgInstallerPathUrl(appVersion: appVersion)
+        if FileManager.default.fileExists(atPath: temporaryDirectoryUrl.relativePath) == true {
+            return temporaryDirectoryUrl
+        }
+        
+        return nil
+    }
+    
+    static func pkgInstallerPathUrl(appVersion: String) -> URL {
+        var temporaryDirectoryUrl = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
+        temporaryDirectoryUrl.appendPathComponent("BingWallpaper_" + appVersion + ".pkg")
+        return temporaryDirectoryUrl
+    }
 }
