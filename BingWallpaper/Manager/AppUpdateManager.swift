@@ -18,9 +18,8 @@ class AppUpdateManager {
         return Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
     }
     
-    static func fetchLatestAppVersionFromGithub() -> String? {
-        assert(Thread.isMainThread == false)
-        let latestHtmlHeaders = DownloadManager.downloadHtmlHeaders(from: githubLatestReleaseUrl)
+    static func fetchLatestAppVersionFromGithub() async -> String? {
+        let latestHtmlHeaders = await DownloadManager.downloadHtmlHeaders(from: githubLatestReleaseUrl)
         return latestHtmlHeaders?.url?.lastPathComponent
     }
     
@@ -30,58 +29,50 @@ class AppUpdateManager {
         return currentAppVersion.versionCompare(latestAppVersion) == .orderedAscending
     }
     
-    static func checkForUpdate(notifyUserAboutNoNewVersion:Bool = false) {
-        DispatchQueue.global().async {
-            guard let latestGithubAppVersion = fetchLatestAppVersionFromGithub() else {
-                print("Failed to fetch latest app version from github")
-                return
+    static func checkForUpdate(notifyUserAboutNoNewVersion:Bool = false) async {
+        guard let latestGithubAppVersion = await fetchLatestAppVersionFromGithub() else {
+            print("Failed to fetch latest app version from github")
+            return
+        }
+        
+        let currentAppVersion = currentAppVersion()
+        
+        if newVersionAvailable(currentAppVersion, latestGithubAppVersion) == false {
+            print("No app update requiered, \(currentAppVersion) is alread the newest version")
+            
+            if notifyUserAboutNoNewVersion == true {
+                    await showAlreadyUpToDateDialog()
             }
-            
-            let currentAppVersion = currentAppVersion()
-            
-            if newVersionAvailable(currentAppVersion, latestGithubAppVersion) == false {
-                print("No app update requiered, \(currentAppVersion) is alread the newest version")
-                
-                if notifyUserAboutNoNewVersion == true {
-                    DispatchQueue.main.async {
-                        showAlreadUpToDateDialog()
-                    }
-                }
-                return
+            return
+        }
+        
+        if let pkgInstallerPathUrl = FileHandler.pkgInstallerAlreadyDownloaded(appVersion: latestGithubAppVersion) {
+            if await showShouldUpdateNowDialog(currentAppVersion: currentAppVersion, latestAppVersion: latestGithubAppVersion) == true {
+                NSWorkspace.shared.open(pkgInstallerPathUrl)
             }
-            
-            if let pkgInstallerPathUrl = FileHandler.pkgInstallerAlreadyDownloaded(appVersion: latestGithubAppVersion) {
-                DispatchQueue.main.async {
-                    if showShouldUpdateNowDialog(currentAppVersion: currentAppVersion, latestAppVersion: latestGithubAppVersion) == true {
-                        NSWorkspace.shared.open(pkgInstallerPathUrl)
-                    }
-                }
-                return
-            }
-            
-            
-            guard let pkgInstaller = downloadLatestInstallerFromGithub(latestGithubAppVersion: latestGithubAppVersion) else {
-                print("Failed to download latest app installer from github")
-                return
-            }
-            
-            guard let pkgInstallerPathUrl = FileHandler.savePkgInstallerToDisk(pkgInstaller: pkgInstaller, appVersion: latestGithubAppVersion) else {
-                return
-            }
-            
-            DispatchQueue.main.async {
-                if showShouldUpdateNowDialog(currentAppVersion: currentAppVersion, latestAppVersion: latestGithubAppVersion) == true {
-                    NSWorkspace.shared.open(pkgInstallerPathUrl)
-                }
-            }
+            return
+        }
+        
+        
+        guard let pkgInstaller = await downloadLatestInstallerFromGithub(latestGithubAppVersion: latestGithubAppVersion) else {
+            print("Failed to download latest app installer from github")
+            return
+        }
+        
+        guard let pkgInstallerPathUrl = FileHandler.savePkgInstallerToDisk(pkgInstaller: pkgInstaller, appVersion: latestGithubAppVersion) else {
+            return
+        }
+        
+        if await showShouldUpdateNowDialog(currentAppVersion: currentAppVersion, latestAppVersion: latestGithubAppVersion) == true {
+            NSWorkspace.shared.open(pkgInstallerPathUrl)
         }
     }
     
-    static func downloadLatestInstallerFromGithub(latestGithubAppVersion: String) -> Data? {
+    static func downloadLatestInstallerFromGithub(latestGithubAppVersion: String) async -> Data? {
         var githubExpandedAssetsUrl = URL(string: githubExpandedAssetsPrefix)!
         githubExpandedAssetsUrl.appendPathComponent(latestGithubAppVersion)
         
-        guard let html = DownloadManager.downloadHtml(from: githubExpandedAssetsUrl) else { return nil }
+        guard let html = await DownloadManager.downloadHtml(from: githubExpandedAssetsUrl) else { return nil }
         
         guard let aHref = html.split(separator: "\n").filter({ line in line.contains(".pkg") && line.contains("/\(latestGithubAppVersion)/")}).first else {
             assertionFailure("Failed to extract pkg link from latest github release website: \(html)")
@@ -93,10 +84,10 @@ class AppUpdateManager {
         var newAppVersionDownloadUrl = URL(string: githubDomain)!
         newAppVersionDownloadUrl.appendPathComponent(newAppVersionDownloadPostfix)
 
-        return DownloadManager.downloadBinary(from: newAppVersionDownloadUrl)
+        return await DownloadManager.downloadBinary(from: newAppVersionDownloadUrl)
     }
     
-    
+    @MainActor
     private static func showShouldUpdateNowDialog(currentAppVersion: String, latestAppVersion: String) -> Bool {
         let currentAppVersion = currentAppVersion.replacingOccurrences(of: "v", with: "")
         let latestAppVersion = latestAppVersion.replacingOccurrences(of: "v", with: "")
@@ -112,7 +103,8 @@ class AppUpdateManager {
         return alert.runModal() == NSApplication.ModalResponse.alertFirstButtonReturn
     }
     
-    private static func showAlreadUpToDateDialog() {
+    @MainActor
+    private static func showAlreadyUpToDateDialog() {
         let alert = NSAlert()
         alert.messageText = "BingWallpaper already up to date"
         alert.informativeText = "There is no new version of BingWallpaper available"

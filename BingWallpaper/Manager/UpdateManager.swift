@@ -10,15 +10,14 @@ class UpdateManager {
     private let settings = Settings()
     private var timer: Timer?
     
+    @MainActor 
     func start() {
-        assert(Thread.isMainThread)
         setupObserver()
         doUpdateOrSetTimer()
     }
     
+    @MainActor 
     private func doUpdateOrSetTimer() {
-        assert(Thread.isMainThread)
-        
         if UpdateScheduleManager.isUpdateNecessary() {
             update()
             return
@@ -37,6 +36,9 @@ class UpdateManager {
     }
         
     private func cleanup() {
+        // TODO: @2h4u: find entries with same startDate and remove them
+        // TODO: @2h4u: probably do this in a migration function in appdelegate
+        
         guard let oldestDateStringToKeep = settings.oldestDateStringToKeep() else { return }
         ImageDescriptionHandler.deleteOldDescriptors(oldestDateStringToKeep: oldestDateStringToKeep)
         FileHandler.deleteOldImages(oldestDateStringToKeep: oldestDateStringToKeep)
@@ -58,20 +60,23 @@ class UpdateManager {
         )
     }
     
+    @MainActor
     @objc func update() {
         print("Updating")
-        assert(Thread.isMainThread)
         settings.lastUpdate = Date()
         
-        DispatchQueue.global().async {
-            ImageDescriptionHandler.downloadNewestImageDescriptors(maxNumberOfImages: 8)
-                .filter { ImageDescriptionHandler.isSavedToDisk(descriptor: $0) == false }
-                .forEach { descriptor in
-                    descriptor.image = ImageDescriptionHandler.downloadImage(descriptor: descriptor)
-                    ImageDescriptionHandler.saveToDisk(descriptor: descriptor)
-                }
+        Task { [weak self] in
+           let descriptors = await  ImageDescriptionHandler.downloadNewestImageDescriptors(maxNumberOfImages: 8)
             
-            DispatchQueue.main.async { [weak self] in
+           let newDescriptors = descriptors
+                .filter { ImageDescriptionHandler.isSavedToDisk(descriptor: $0) == false }
+            
+            for descriptor in newDescriptors {
+                descriptor.image = await ImageDescriptionHandler.downloadImage(descriptor: descriptor)
+                ImageDescriptionHandler.saveToDisk(descriptor: descriptor)
+            }
+            
+            await MainActor.run { [weak self] in
                 guard let self = self else { return }
                 self.cleanup()
                 self.delegate?.imagesUpdated()
@@ -90,10 +95,12 @@ class UpdateManager {
         }
     }
     
+    @MainActor 
     @objc func receiveSleepNote(note: NSNotification) {
         timer?.invalidate()
     }
     
+    @MainActor 
     @objc func receiveWakeNote(note: NSNotification) {
         doUpdateOrSetTimer()
     }

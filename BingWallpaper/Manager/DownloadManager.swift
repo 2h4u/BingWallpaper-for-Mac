@@ -3,98 +3,65 @@ import Foundation
 
 class DownloadManager {
     
-    private static func downloadData(from url: URL) -> DownloadResponse {
-        assert(Thread.isMainThread == false)
-        
-        let semaphore = DispatchSemaphore(value: 0)
-        var response: DownloadResponse!
-        URLSession.shared.dataTask(with: url, completionHandler: { data, urlResponse, error in
-            response = DownloadResponse(data: data, urlResponse: urlResponse, error: error)
-            semaphore.signal()
-        }).resume()
-        
-        semaphore.wait()
-        return response
+    private static func downloadData(from url: URL) async throws-> DownloadResponse {
+        let (data, urlResponse) = try await URLSession.shared.data(from: url)
+        return DownloadResponse(data: data, urlResponse: urlResponse)
     }
     
-    private static func downloadHttpHead(from url: URL) -> DownloadResponse {
-        assert(Thread.isMainThread == false)
-        
-        let semaphore = DispatchSemaphore(value: 0)
-        var response: DownloadResponse!
+    private static func downloadHttpHead(from url: URL) async throws -> DownloadResponse {
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "HEAD"
-
-        URLSession.shared.dataTask(with: urlRequest, completionHandler: { data, urlResponse, error in
-            response = DownloadResponse(data: data, urlResponse: urlResponse, error: error)
-            semaphore.signal()
-        }).resume()
-        
-        semaphore.wait()
-        return response
+        let (data, urlResponse) = try await URLSession.shared.data(for: urlRequest)
+        return DownloadResponse(data: data, urlResponse: urlResponse)
     }
     
-    static func downloadJson(numberOfImages: Int) -> [String: Any] {
+    static func downloadJson(numberOfImages: Int) async -> [String: Any] {
         // TODO: @2h4u: idx is the start index of the batch of image descriptors that is downloaded, maybe add support for it so more images from the past can be used?
-        let response = downloadData(from: URL(string: "https://www.bing.com/HPImageArchive.aspx?format=js&n=\(numberOfImages)&idx=0")!)
-        
-        if let error = response.error {
-            print(error)
-        }
-        
-        guard let data = response.data else {
-            return [:]
-        }
-        
         do {
-            return try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as! [String: Any]
+            let response = try await downloadData(from: URL(string: "https://www.bing.com/HPImageArchive.aspx?format=js&n=\(numberOfImages)&idx=0")!)
+            return try JSONSerialization.jsonObject(with: response.data, options: .mutableContainers) as! [String: Any]
         } catch {
             print(error)
             return [:]
         }
     }
     
-    static func downloadImage(from url: URL) -> NSImage? {
-        let response = downloadData(from: url)
-        if let error = response.error {
+    static func downloadImage(from url: URL) async -> NSImage? {
+        do {
+            let response = try await downloadData(from: url)
+            return NSImage(data: response.data)
+        } catch let error {
             print(error)
-        }
-        
-        guard let data = response.data else {
             return nil
         }
-        
-        return NSImage(data: data)
     }
     
-    static func downloadHtml(from url: URL) -> String? {
-        let response = downloadData(from: url)
-        if let error = response.error {
+    static func downloadHtml(from url: URL) async -> String? {
+        do {
+            let response = try await downloadData(from: url)
+            return String(data: response.data, encoding: .utf8)
+        } catch let error {
             print(error)
-        }
-        
-        guard let data = response.data else {
             return nil
         }
-        
-        return String(data: data, encoding: .utf8)
     }
     
-    static func downloadHtmlHeaders(from url: URL) -> URLResponse? {
-        let response = downloadHttpHead(from: url)
-        if let error = response.error {
+    static func downloadHtmlHeaders(from url: URL) async -> URLResponse? {
+        do {
+            return try await downloadHttpHead(from: url).urlResponse
+        } catch let error {
             print(error)
+            return nil
         }
-        
-        return response.urlResponse
     }
     
-    static func downloadBinary(from url: URL) -> Data? {
-        let response = downloadData(from: url)
-        if let error = response.error {
+    static func downloadBinary(from url: URL) async -> Data? {
+        do {
+            let response = try await downloadData(from: url)
+            return response.data
+        } catch let error {
             print(error)
+            return nil
         }
-        
-        return response.data
     }
 }

@@ -2,8 +2,8 @@ import Cocoa
 import Foundation
 
 class ImageDescriptionHandler {
-    static func downloadImage(descriptor: ImageDescriptor) -> NSImage? {
-        return DownloadManager.downloadImage(from: descriptor.imageUrl)
+    static func downloadImage(descriptor: ImageDescriptor) async -> NSImage? {
+        return await DownloadManager.downloadImage(from: descriptor.imageUrl)
     }
     
     static func imageDescriptorsFromDb() -> [ImageDescriptor] {
@@ -30,6 +30,7 @@ class ImageDescriptionHandler {
         }
     }
     
+    @MainActor 
     static func updateImageDescriptors(from json: [String: Any]) -> [ImageDescriptor] {
         guard json.isEmpty == false,
               let images = json["images"] as? [[String: Any]]
@@ -48,6 +49,7 @@ class ImageDescriptionHandler {
             .map { $0.startDate }
         
         let imageDescriptors = images
+            .filter { image in preservedStartDates.contains(image["startdate"] as! String) == false }
             .map { image -> ImageDescriptor in
                 let entity = NSEntityDescription.entity(forEntityName: "ImageDescriptor", in: managedContext)!
                 let imageDescriptor = ImageDescriptor(entity: entity, insertInto: managedContext)
@@ -68,18 +70,9 @@ class ImageDescriptionHandler {
         return imageDescriptors
     }
     
-    static func downloadNewestImageDescriptors(maxNumberOfImages: Int) -> [ImageDescriptor] {
-        assert(Thread.isMainThread == false)
-        let json = DownloadManager.downloadJson(numberOfImages: maxNumberOfImages)
-        
-        let semaphore = DispatchSemaphore(value: 0)
-        var descriptors = [ImageDescriptor]()
-        DispatchQueue.main.async {
-            descriptors = ImageDescriptionHandler.updateImageDescriptors(from: json)
-            semaphore.signal()
-        }
-        semaphore.wait()
-        return descriptors
+    static func downloadNewestImageDescriptors(maxNumberOfImages: Int) async -> [ImageDescriptor] {
+        let json = await DownloadManager.downloadJson(numberOfImages: maxNumberOfImages)
+        return await ImageDescriptionHandler.updateImageDescriptors(from: json)
     }
     
     static func imageDownloadPath(descriptor: ImageDescriptor) -> URL {

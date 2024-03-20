@@ -73,6 +73,7 @@ class MenuController: NSObject {
     
     // MARK: - IBActions
     
+    @MainActor
     @objc func showSettingsWc(sender: NSMenuItem?) {
         (settingsWc.contentViewController as! SettingsVc).delegate = self
         settingsWc.showWindow(self)
@@ -80,14 +81,19 @@ class MenuController: NSObject {
         NSApp.activate(ignoringOtherApps: true)
     }
     
+    @MainActor
     @objc func refreshImages(sender: NSMenuItem) {
         updateManager?.update()
     }
     
+    @MainActor
     @objc func checkForAppUpdate(sender: NSMenuItem) {
-        AppUpdateManager.checkForUpdate()
+        Task {
+            await AppUpdateManager.checkForUpdate()
+        }
     }
     
+    @MainActor
     @objc func imageSelectorViewLeftButtonAction(_ sender: NSButton) {
         if descriptors.indices.contains(selectedDescriptorIndex - 1) == false {
             return
@@ -98,6 +104,7 @@ class MenuController: NSObject {
         updateImageSelectorView(newSelectedDescriptorIndex: selectedDescriptorIndex)
     }
     
+    @MainActor
     @objc func imageSelectorViewRightButtonAction(_ sender: NSButton) {
         if descriptors.indices.contains(selectedDescriptorIndex + 1) == false {
             return
@@ -108,6 +115,7 @@ class MenuController: NSObject {
         updateImageSelectorView(newSelectedDescriptorIndex: selectedDescriptorIndex)
     }
     
+    @MainActor
     @objc func textItemAction(sender: NSMenuItem) {
         if let descriptor = descriptors[safe: selectedDescriptorIndex] {
             NSWorkspace.shared.open(descriptor.copyrightUrl)

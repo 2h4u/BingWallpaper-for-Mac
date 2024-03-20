@@ -23,7 +23,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         killBingWallpaperHelperIfNeeded()
         
-        AppUpdateManager.checkForUpdate()
+        Task {
+            await AppUpdateManager.checkForUpdate()
+        }
     }
     
     func applicationDidBecomeActive(_ notification: Notification) {
