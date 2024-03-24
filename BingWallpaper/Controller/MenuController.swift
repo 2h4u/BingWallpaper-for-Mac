@@ -14,6 +14,7 @@ class MenuController: NSObject {
     
     // MARK: - UI setup
     
+    @MainActor
     func setup() {
         guard self.statusItem == nil && self.menu == nil else { return }
         if settings.hideMenuBarIcon == true { return }
@@ -139,11 +140,22 @@ class MenuController: NSObject {
         }
     }
     
+    @MainActor
     private func updateImageSelectorView(newSelectedDescriptorIndex: Int) {
         guard let menu = menu else { return }
         
         let descriptor = descriptors[safe: newSelectedDescriptorIndex]
-        imageSelectorView.imageView.image = descriptor?.image
+        Task {
+            guard let descriptor else { return }
+            do {
+                let imageData = try await descriptor.image.loadFromDisk()
+                await MainActor.run { [weak self] in
+                    self?.imageSelectorView.imageView.image = NSImage(data: imageData)
+                }
+            } catch {
+                print("Failed to load image from disk: \(descriptor)")
+            }
+        }
         
         let textItem = NSMenuItem(title: "", action: nil, keyEquivalent: "")
         textItem.tag = MenuController.TEXT_VIEW_TAG
@@ -180,7 +192,8 @@ class MenuController: NSObject {
 
 extension MenuController: UpdateManagerDelegate {
     func imagesUpdated() {
-        self.descriptors = ImageDescriptionHandler.imageDescriptorsFromDb()
+        self.descriptors = Database.instance.allImageDescriptors()
+            .filter { $0.image.isOnDisk() }
         selectedDescriptorIndex = self.descriptors.firstIndex(where: { $0 == self.descriptors.last }) ?? self.descriptors.endIndex
         updateSelectedImage(newSelectedDescriptorIndex: selectedDescriptorIndex)
     }

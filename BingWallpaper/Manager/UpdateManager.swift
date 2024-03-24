@@ -2,6 +2,7 @@ import Foundation
 import AppKit
 
 protocol UpdateManagerDelegate: AnyObject {
+    @MainActor
     func imagesUpdated()
 }
 
@@ -35,12 +36,13 @@ class UpdateManager {
         )
     }
         
+    @MainActor
     private func cleanup() {
         // TODO: @2h4u: find entries with same startDate and remove them
         // TODO: @2h4u: probably do this in a migration function in appdelegate
         
         guard let oldestDateStringToKeep = settings.oldestDateStringToKeep() else { return }
-        ImageDescriptionHandler.deleteOldDescriptors(oldestDateStringToKeep: oldestDateStringToKeep)
+        Database.instance.deleteImageDescriptors(olderThan: oldestDateStringToKeep)
         FileHandler.deleteOldImages(oldestDateStringToKeep: oldestDateStringToKeep)
     }
     
@@ -66,14 +68,27 @@ class UpdateManager {
         settings.lastUpdate = Date()
         
         Task { [weak self] in
-           let descriptors = await  ImageDescriptionHandler.downloadNewestImageDescriptors(maxNumberOfImages: 8)
+            
+            let imageEntries: [DownloadManager.ImageEntry]
+            do {
+                imageEntries = try await DownloadManager.downloadImageEntries(numberOfImages: 8)
+            } catch {
+                print("Failed to download image entries with error: \(error.localizedDescription)")
+                return
+            }
+            
+           let descriptors = Database.instance.updateImageDescriptors(from: imageEntries)
             
            let newDescriptors = descriptors
-                .filter { ImageDescriptionHandler.isSavedToDisk(descriptor: $0) == false }
+                .filter { $0.image.isOnDisk() == false }
             
             for descriptor in newDescriptors {
-                descriptor.image = await ImageDescriptionHandler.downloadImage(descriptor: descriptor)
-                ImageDescriptionHandler.saveToDisk(descriptor: descriptor)
+                do {
+                    let imageData = try await descriptor.image.download()
+                    try descriptor.image.saveToDisk(imageData: imageData)
+                } catch {
+                    print("Failed to download and store image with error: \(error.localizedDescription)")
+                }
             }
             
             await MainActor.run { [weak self] in

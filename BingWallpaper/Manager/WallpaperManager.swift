@@ -39,7 +39,7 @@ class WallpaperManager {
     
     private func updateWallpaperIfNeeded() {
         guard let descriptor = imageDescriptor else { return }
-        let imageUrl = ImageDescriptionHandler.imageDownloadPath(descriptor: descriptor)
+        let imageUrl = descriptor.image.downloadPath
         let workspace = NSWorkspace.shared
         
         do {

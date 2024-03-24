@@ -43,6 +43,10 @@ class FileHandler {
         }
     }
     
+    static func saveImageDataToDisk(imageData: Data, toUrl: URL) throws {
+        try imageData.write(to: toUrl, options: .withoutOverwriting)
+    }
+    
     static func getSavedImages() -> [URL] {
         do {
             return try FileManager.default.contentsOfDirectory(at: Settings().imageDownloadPath, includingPropertiesForKeys: nil, options: FileManager.DirectoryEnumerationOptions.skipsHiddenFiles)

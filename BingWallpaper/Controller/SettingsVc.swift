@@ -1,7 +1,9 @@
 import Cocoa
 
 protocol SettingsVcDelegate: AnyObject {
+    @MainActor
     func showMenuBarIcon()
+    @MainActor
     func hideMenuBarIcon()
 }
 

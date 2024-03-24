@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2C1313BE2861A429006E0A29 /* ImageDescriptionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1313BD2861A429006E0A29 /* ImageDescriptionHandler.swift */; };
 		2C1313C02861AAC9006E0A29 /* WallpaperManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1313BF2861AAC9006E0A29 /* WallpaperManager.swift */; };
 		2C1313C22861B128006E0A29 /* UpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1313C12861B128006E0A29 /* UpdateManager.swift */; };
 		2C1313C42861C8FB006E0A29 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1313C32861C8FB006E0A29 /* Settings.swift */; };
@@ -31,6 +30,9 @@
 		2CEB95F12869A36400C75D8B /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEB95F02869A36400C75D8B /* TextView.swift */; };
 		2CEDEC402860D9E10096B707 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEDEC3F2860D9E10096B707 /* DownloadManager.swift */; };
 		E534128D291810DB00F91EE0 /* UpdateScheduleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E534128C291810DB00F91EE0 /* UpdateScheduleManager.swift */; };
+		E56BD7672BAF697B0013F1A2 /* ImageError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E56BD7662BAF697B0013F1A2 /* ImageError.swift */; };
+		E56BD7692BAF735C0013F1A2 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = E56BD7682BAF735C0013F1A2 /* Image.swift */; };
+		E56BD76C2BB007450013F1A2 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = E56BD76B2BB007450013F1A2 /* Database.swift */; };
 		E58DDD51290F8772005E6E03 /* UpdateTimeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58DDD50290F8772005E6E03 /* UpdateTimeTests.swift */; };
 		E5DB8FE32945D97800AF557A /* AppUpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DB8FE22945D97800AF557A /* AppUpdateManager.swift */; };
 		E5DB8FE52945E76800AF557A /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DB8FE42945E76800AF557A /* StringExtensions.swift */; };
@@ -60,7 +62,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		2C1313BD2861A429006E0A29 /* ImageDescriptionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDescriptionHandler.swift; sourceTree = "<group>"; };
 		2C1313BF2861AAC9006E0A29 /* WallpaperManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperManager.swift; sourceTree = "<group>"; };
 		2C1313C12861B128006E0A29 /* UpdateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateManager.swift; sourceTree = "<group>"; };
 		2C1313C32861C8FB006E0A29 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
@@ -91,6 +92,9 @@
 		2CEDEC3F2860D9E10096B707 /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		9AF86FA1319AE46B42748077 /* Pods_BingWallpaper.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BingWallpaper.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E534128C291810DB00F91EE0 /* UpdateScheduleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateScheduleManager.swift; sourceTree = "<group>"; };
+		E56BD7662BAF697B0013F1A2 /* ImageError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageError.swift; sourceTree = "<group>"; };
+		E56BD7682BAF735C0013F1A2 /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
+		E56BD76B2BB007450013F1A2 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		E58DDD47290F874F005E6E03 /* BingWallpaperTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BingWallpaperTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E58DDD50290F8772005E6E03 /* UpdateTimeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateTimeTests.swift; sourceTree = "<group>"; };
 		E5DB8FE22945D97800AF557A /* AppUpdateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUpdateManager.swift; sourceTree = "<group>"; };
@@ -146,13 +150,13 @@
 			path = Manager;
 			sourceTree = "<group>";
 		};
-		2C405AE6286DE37700A14B1A /* ImageDescriptor */ = {
+		2C405AE6286DE37700A14B1A /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				2C1313BD2861A429006E0A29 /* ImageDescriptionHandler.swift */,
 				2C989836286DF54C002E5E46 /* ImageDescriptor.swift */,
+				E56BD7682BAF735C0013F1A2 /* Image.swift */,
 			);
-			path = ImageDescriptor;
+			path = Models;
 			sourceTree = "<group>";
 		};
 		2C405AE7286DE38D00A14B1A /* Helper */ = {
@@ -164,6 +168,7 @@
 				2C8F896A2860EDB20017CC6C /* DownloadResponse.swift */,
 				2C4D65BF2864C3AB00878CED /* CollectionExtensions.swift */,
 				E5DB8FE42945E76800AF557A /* StringExtensions.swift */,
+				E56BD7662BAF697B0013F1A2 /* ImageError.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -215,7 +220,7 @@
 				2C9C7C2528603C6900F846FD /* AppDelegate.swift */,
 				2C9C7C2B28603C6B00F846FD /* Main.storyboard */,
 				2C1313C32861C8FB006E0A29 /* Settings.swift */,
-				2C405AE6286DE37700A14B1A /* ImageDescriptor */,
+				E56BD76A2BB0072C0013F1A2 /* Database */,
 				2C405AE5286DE35E00A14B1A /* Manager */,
 				2CEB95F32869E6DD00C75D8B /* Views */,
 				2C405AE0286DD2F600A14B1A /* Controller */,
@@ -250,6 +255,15 @@
 				9AF86FA1319AE46B42748077 /* Pods_BingWallpaper.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E56BD76A2BB0072C0013F1A2 /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				E56BD76B2BB007450013F1A2 /* Database.swift */,
+				2C405AE6286DE37700A14B1A /* Models */,
+			);
+			path = Database;
 			sourceTree = "<group>";
 		};
 		E58DDD48290F874F005E6E03 /* BingWallpaperTests */ = {
@@ -403,18 +417,20 @@
 				2CEDEC402860D9E10096B707 /* DownloadManager.swift in Sources */,
 				E534128D291810DB00F91EE0 /* UpdateScheduleManager.swift in Sources */,
 				2C4D65C02864C3AB00878CED /* CollectionExtensions.swift in Sources */,
+				E56BD7672BAF697B0013F1A2 /* ImageError.swift in Sources */,
 				2CEB95F12869A36400C75D8B /* TextView.swift in Sources */,
 				2CA439D1286189260015AE45 /* FileHandler.swift in Sources */,
 				E5DB8FE32945D97800AF557A /* AppUpdateManager.swift in Sources */,
 				2C6577DB286227F200868EBA /* ImageSelectorView.swift in Sources */,
 				2C1313C42861C8FB006E0A29 /* Settings.swift in Sources */,
+				E56BD7692BAF735C0013F1A2 /* Image.swift in Sources */,
 				2C35BAC5286360B5009F8556 /* MenuController.swift in Sources */,
 				2C1313C02861AAC9006E0A29 /* WallpaperManager.swift in Sources */,
+				E56BD76C2BB007450013F1A2 /* Database.swift in Sources */,
 				2C405AE3286DD5CA00A14B1A /* SettingsWc.swift in Sources */,
 				2C9C7C2628603C6900F846FD /* AppDelegate.swift in Sources */,
 				E5DB8FE52945E76800AF557A /* StringExtensions.swift in Sources */,
 				2C989837286DF54C002E5E46 /* ImageDescriptor.swift in Sources */,
-				2C1313BE2861A429006E0A29 /* ImageDescriptionHandler.swift in Sources */,
 				2C8F896B2860EDB20017CC6C /* DownloadResponse.swift in Sources */,
 				2C1313C22861B128006E0A29 /* UpdateManager.swift in Sources */,
 				2C405ADF286DD2EC00A14B1A /* SettingsVc.swift in Sources */,

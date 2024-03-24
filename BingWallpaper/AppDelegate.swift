@@ -45,75 +45,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             DistributedNotificationCenter.default().post(name: .killLauncher, object: Bundle.main.bundleIdentifier!)
         }
     }
-    
-    // MARK: - Core Data stack
-    
-    func entityDescription() -> NSEntityDescription {
-        let entity = NSEntityDescription()
-        entity.name = "ImageDescriptor"
-        entity.managedObjectClassName = NSStringFromClass(ImageDescriptor.self)
-        
-        // Attributes
-        let startDateAttr = NSAttributeDescription()
-        startDateAttr.name = "startDate"
-        startDateAttr.attributeType = .stringAttributeType
-        startDateAttr.isOptional = false
-        
-        let endDateAttr = NSAttributeDescription()
-        endDateAttr.name = "endDate"
-        endDateAttr.attributeType = .stringAttributeType
-        endDateAttr.isOptional = false
-        
-        let imageUrlAttr = NSAttributeDescription()
-        imageUrlAttr.name = "imageUrl"
-        imageUrlAttr.attributeType = .URIAttributeType
-        imageUrlAttr.isOptional = false
-        
-        let descriptionStringAttr = NSAttributeDescription()
-        descriptionStringAttr.name = "descriptionString"
-        descriptionStringAttr.attributeType = .stringAttributeType
-        descriptionStringAttr.isOptional = false
-        
-        let copyrightUrlAttr = NSAttributeDescription()
-        copyrightUrlAttr.name = "copyrightUrl"
-        copyrightUrlAttr.attributeType = .URIAttributeType
-        copyrightUrlAttr.isOptional = false
-        
-        entity.properties = [
-            startDateAttr,
-            endDateAttr,
-            imageUrlAttr,
-            descriptionStringAttr,
-            copyrightUrlAttr
-        ]
-        
-        return entity
-    }
-    
-    func managedObjectModel() -> NSManagedObjectModel {
-        let model = NSManagedObjectModel()
-        
-        model.entities = [entityDescription()]
-        
-        return model
-    }
-    
-    lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "DataModel", managedObjectModel: managedObjectModel())
-        
-        container.loadPersistentStores(completionHandler: { _, error in
-            if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-        })
-        return container
-    }()
-    
+
     // MARK: - Core Data Saving and Undo support
     
     @IBAction func saveAction(_ sender: AnyObject?) {
         // Performs the save action for the application, which is to send the save: message to the application's managed object context. Any encountered errors are presented to the user.
-        let context = persistentContainer.viewContext
+        let context = Database.instance.persistentContainer.viewContext
         
         if !context.commitEditing() {
             NSLog("\(NSStringFromClass(type(of: self))) unable to commit editing before saving")
@@ -123,20 +60,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 try context.save()
             } catch {
                 // Customize this code block to include application-specific recovery steps.
-                let nserror = error as NSError
-                NSApplication.shared.presentError(nserror)
+                NSApplication.shared.presentError(error as NSError)
             }
         }
     }
     
     func windowWillReturnUndoManager(window: NSWindow) -> UndoManager? {
         // Returns the NSUndoManager for the application. In this case, the manager returned is that of the managed object context for the application.
-        return persistentContainer.viewContext.undoManager
+        return Database.instance.persistentContainer.viewContext.undoManager
     }
     
     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
         // Save changes in the application's managed object context before the application terminates.
-        let context = persistentContainer.viewContext
+        let context = Database.instance.persistentContainer.viewContext
         
         if !context.commitEditing() {
             NSLog("\(NSStringFromClass(type(of: self))) unable to commit editing to terminate")
@@ -150,10 +86,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         do {
             try context.save()
         } catch {
-            let nserror = error as NSError
-            
             // Customize this code block to include application-specific recovery steps.
-            let result = sender.presentError(nserror)
+            let result = sender.presentError(error as NSError)
             if result {
                 return .terminateCancel
             }

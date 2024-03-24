@@ -84,7 +84,7 @@ class AppUpdateManager {
         var newAppVersionDownloadUrl = URL(string: githubDomain)!
         newAppVersionDownloadUrl.appendPathComponent(newAppVersionDownloadPostfix)
 
-        return await DownloadManager.downloadBinary(from: newAppVersionDownloadUrl)
+        return try? await DownloadManager.downloadBinary(from: newAppVersionDownloadUrl)
     }
     
     @MainActor
