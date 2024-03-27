@@ -3,7 +3,7 @@ import AppKit
 
 protocol UpdateManagerDelegate: AnyObject {
     @MainActor
-    func imagesUpdated()
+    func downloadedNewImage()
 }
 
 class UpdateManager {
@@ -84,17 +84,18 @@ class UpdateManager {
             
             for descriptor in newDescriptors {
                 do {
-                    let imageData = try await descriptor.image.download()
-                    try descriptor.image.saveToDisk(imageData: imageData)
+                    try await descriptor.image.downloadAndSaveToDisk()
                 } catch {
-                    print("Failed to download and store image with error: \(error.localizedDescription)")
+                    print("Failed to download and store image \(descriptor.imageUrl) with error: \(error.localizedDescription)")
                 }
             }
             
             await MainActor.run { [weak self] in
                 guard let self = self else { return }
                 self.cleanup()
-                self.delegate?.imagesUpdated()
+                if newDescriptors.isEmpty == false {
+                    self.delegate?.downloadedNewImage()
+                }
                 let fetchInterval = UpdateScheduleManager.nextFetchTimeInterval()
                 print("Update complete, next update at \(Date().addingTimeInterval(fetchInterval))")
                 

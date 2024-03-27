@@ -23,7 +23,7 @@ class MenuController: NSObject {
         self.menu = createMenu()
         self.statusItem!.menu = menu
         
-        imagesUpdated()
+        showNewestImage()
     }
     
     private func createStatusBarItem() -> NSStatusItem {
@@ -186,16 +186,21 @@ class MenuController: NSObject {
         if description == nil { return "" }
         return description?.split(separator: "(").last?.replacingOccurrences(of: ")", with: "") ?? ""
     }
+    
+    @MainActor
+    private func showNewestImage() {
+        self.descriptors = Database.instance.allImageDescriptors()
+            .filter { $0.image.isOnDisk() }
+        selectedDescriptorIndex = self.descriptors.firstIndex(where: { $0 == self.descriptors.last }) ?? self.descriptors.endIndex
+        updateSelectedImage(newSelectedDescriptorIndex: selectedDescriptorIndex)
+    }
 }
 
 // MARK: - Delegates
 
 extension MenuController: UpdateManagerDelegate {
-    func imagesUpdated() {
-        self.descriptors = Database.instance.allImageDescriptors()
-            .filter { $0.image.isOnDisk() }
-        selectedDescriptorIndex = self.descriptors.firstIndex(where: { $0 == self.descriptors.last }) ?? self.descriptors.endIndex
-        updateSelectedImage(newSelectedDescriptorIndex: selectedDescriptorIndex)
+    func downloadedNewImage() {
+        showNewestImage()
     }
 }
 

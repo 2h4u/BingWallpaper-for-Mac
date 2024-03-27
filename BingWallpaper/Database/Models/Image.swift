@@ -24,11 +24,12 @@ class Image {
         return try Data(contentsOf: downloadPath)
     }
     
-    func download() async throws -> Data {
+    func downloadAndSaveToDisk() async throws {
         guard let descriptor else {
             throw Error.missingDescriptor
         }
-        return try await DownloadManager.downloadBinary(from: descriptor.imageUrl)
+        let imageData = try await DownloadManager.downloadBinary(from: descriptor.imageUrl)
+        try FileHandler.saveImageDataToDisk(imageData: imageData, toUrl: downloadPath)
     }
     
     static func isSavedToDisk(descriptor: ImageDescriptor) -> Bool {
@@ -39,9 +40,4 @@ class Image {
     func isOnDisk() -> Bool {
         return FileManager.default.fileExists(atPath: downloadPath.relativePath)
     }
-    
-    func saveToDisk(imageData: Data) throws {
-        try FileHandler.saveImageDataToDisk(imageData: imageData, toUrl: downloadPath)
-    }
-
 }
