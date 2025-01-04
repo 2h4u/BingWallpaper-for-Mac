@@ -1,2 +1,3 @@
 #!/bin/sh
 killall BingWallpaper
+exit 0
