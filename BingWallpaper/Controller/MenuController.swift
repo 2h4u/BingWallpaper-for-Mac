@@ -77,6 +77,7 @@ class MenuController: NSObject {
     @MainActor
     @objc func showSettingsWc(sender: NSMenuItem?) {
         (settingsWc.contentViewController as! SettingsVc).delegate = self
+        (settingsWc.contentViewController as! SettingsVc).updateManager = updateManager
         settingsWc.showWindow(self)
         settingsWc.window?.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)

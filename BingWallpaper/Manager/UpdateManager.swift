@@ -42,7 +42,7 @@ class UpdateManager {
         // TODO: @2h4u: probably do this in a migration function in appdelegate
         
         guard let oldestDateStringToKeep = settings.oldestDateStringToKeep() else { return }
-        Database.instance.deleteImageDescriptors(olderThan: oldestDateStringToKeep)
+        try? Database.instance.deleteImageDescriptors(olderThan: oldestDateStringToKeep)
         FileHandler.deleteOldImages(oldestDateStringToKeep: oldestDateStringToKeep)
     }
     

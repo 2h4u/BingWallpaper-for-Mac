@@ -28,18 +28,14 @@ class Database {
     }
     
     @MainActor
-    func deleteImageDescriptors(olderThan oldestDateStringToKeep: String) {
+    func deleteImageDescriptors(olderThan oldestDateStringToKeep: String) throws {
         let managedContext = persistentContainer.viewContext
         
         allImageDescriptors()
             .filter { $0.startDate <= oldestDateStringToKeep }
             .forEach { managedContext.delete($0) }
         
-        do {
-            try managedContext.save()
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
-        }
+        try managedContext.save()
     }
     
     @MainActor

@@ -16,6 +16,7 @@ class SettingsVc: NSViewController {
     
     private let settings = Settings()
     weak var delegate: SettingsVcDelegate?
+    weak var updateManager: UpdateManager?
     
     // MARK: - Lifecycle
     
@@ -64,6 +65,28 @@ class SettingsVc: NSViewController {
     @IBAction func keepImagesSliderAction(_ sender: NSSlider) {
         settings.keepImageDuration = sender.integerValue
         setKeepImagesText()
+    }
+    
+    @IBAction func resetDatabaseButtonAction(_ sender: NSButton) {
+        print("Resetting Database...")
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "YYYYMMdd"
+        let oldestDateStringToKeep = dateFormatter.string(from: Date())
+        
+        do {
+           try Database.instance.deleteImageDescriptors(olderThan: oldestDateStringToKeep)
+        } catch let error {
+            print("Failed resetting Database: \(error.localizedDescription)")
+            let alert = NSAlert()
+            alert.messageText = "Failed to reset Database"
+            alert.informativeText = error.localizedDescription
+            let updateButton = alert.addButton(withTitle: "Ok")
+            alert.alertStyle = .informational
+            alert.window.defaultButtonCell = updateButton.cell as? NSButtonCell
+            alert.runModal()
+        }
+        
+        updateManager?.update()
     }
     
     // MARK: - Private
