@@ -90,7 +90,7 @@ public class Settings {
         }
         
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "YYYYMMdd"
+        dateFormatter.dateFormat = "yyyyMMdd"
         return dateFormatter.string(from: oldestDateToKeep)
     }
     
