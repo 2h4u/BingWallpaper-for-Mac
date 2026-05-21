@@ -1,9 +1,4 @@
 import Cocoa
-import ServiceManagement
-
-extension Notification.Name {
-    static let killLauncher = Notification.Name("killLauncher")
-}
 
 // TODO: @2h4u create and add icon (app icon and menubar icon)
 
@@ -20,9 +15,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         menuController.updateManager = updateManager
         menuController.setup()
-        
-        killBingWallpaperHelperIfNeeded()
-        
+
         Task {
             await AppUpdateManager.checkForUpdate()
         }
@@ -36,16 +29,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return true
     }
     
-    fileprivate func killBingWallpaperHelperIfNeeded() {
-        let launcherAppId = "com.2h4u.BingWallpaperHelper"
-        let runningApps = NSWorkspace.shared.runningApplications
-        let isRunning = !runningApps.filter { $0.bundleIdentifier == launcherAppId }.isEmpty
-        
-        if isRunning {
-            DistributedNotificationCenter.default().post(name: .killLauncher, object: Bundle.main.bundleIdentifier!)
-        }
-    }
-
     // MARK: - Core Data Saving and Undo support
     
     @IBAction func saveAction(_ sender: AnyObject?) {

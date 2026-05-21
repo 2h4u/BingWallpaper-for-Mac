@@ -1,18 +1,39 @@
 import Foundation
 import ServiceManagement
+import os.log
 
 public class Settings {
     private let defaults = UserDefaults.standard
-    
-    public init() { }
-    
+
+    public init() {
+        migrateLegacyLoginItemIfNeeded()
+    }
+
     var launchAtLogin: Bool {
         get {
-            return defaults.bool(forKey: Settings.SM_LOGIN_ENABLED)
+            return SMAppService.mainApp.status == .enabled
         }
         set {
-            SMLoginItemSetEnabled("com.2h4u.BingWallpaperHelper" as CFString, newValue)
-            defaults.set(newValue, forKey: Settings.SM_LOGIN_ENABLED)
+            do {
+                if newValue {
+                    try SMAppService.mainApp.register()
+                } else {
+                    try SMAppService.mainApp.unregister()
+                }
+            } catch {
+                os_log("Failed to %{public}@ login item with error: %{public}@",
+                       newValue ? "register" : "unregister",
+                       String(describing: error))
+            }
+        }
+    }
+
+    private func migrateLegacyLoginItemIfNeeded() {
+        guard defaults.object(forKey: Settings.SM_LOGIN_ENABLED_LEGACY) != nil else { return }
+        let wasEnabled = defaults.bool(forKey: Settings.SM_LOGIN_ENABLED_LEGACY)
+        defaults.removeObject(forKey: Settings.SM_LOGIN_ENABLED_LEGACY)
+        if wasEnabled, SMAppService.mainApp.status != .enabled {
+            try? SMAppService.mainApp.register()
         }
     }
     
@@ -94,7 +115,7 @@ public class Settings {
         return dateFormatter.string(from: oldestDateToKeep)
     }
     
-    private static let SM_LOGIN_ENABLED = "SM_LOGIN_ENABLED"
+    private static let SM_LOGIN_ENABLED_LEGACY = "SM_LOGIN_ENABLED"
     private static let HIDE_MENU_BAR_ICON = "HIDE_MENU_BAR_ICON"
     private static let IMAGE_DOWNLOAD_PATH = "IMAGE_DOWNLOAD_PATH"
     private static let LAST_UPDATE = "LAST_UPDATE"
