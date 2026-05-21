@@ -1,6 +1,11 @@
 import Foundation
 import ServiceManagement
-import os.log
+import OSLog
+
+private let logger = Logger(
+    subsystem: Logging.subsystem,
+    category: Logging.Category.Settings.rawValue
+)
 
 public class Settings {
     private let defaults = UserDefaults.standard
@@ -21,9 +26,8 @@ public class Settings {
                     try SMAppService.mainApp.unregister()
                 }
             } catch {
-                os_log("Failed to %{public}@ login item with error: %{public}@",
-                       newValue ? "register" : "unregister",
-                       String(describing: error))
+                let actionString = newValue ? "register" : "unregister"
+                logger.error("Failed to \(actionString, privacy: .public) login item with error: \(String(describing: error), privacy: .public)")
             }
         }
     }

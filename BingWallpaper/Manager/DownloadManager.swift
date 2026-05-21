@@ -1,5 +1,11 @@
 import Cocoa
 import Foundation
+import OSLog
+
+private let logger = Logger(
+    subsystem: Logging.subsystem,
+    category: Logging.Category.Download.rawValue
+)
 
 class DownloadManager {
     
@@ -38,7 +44,7 @@ class DownloadManager {
             let response = try await downloadData(from: url)
             return String(data: response.data, encoding: .utf8)
         } catch let error {
-            print(error)
+            logger.error("Failed to download HTML from \(url.absoluteString, privacy: .public): \(error.localizedDescription, privacy: .public)")
             return nil
         }
     }
@@ -47,7 +53,7 @@ class DownloadManager {
         do {
             return try await downloadHttpHead(from: url).urlResponse
         } catch let error {
-            print(error)
+            logger.error("Failed to download HTML headers from \(url.absoluteString, privacy: .public): \(error.localizedDescription, privacy: .public)")
             return nil
         }
     }

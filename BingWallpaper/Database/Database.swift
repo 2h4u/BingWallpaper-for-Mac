@@ -7,6 +7,12 @@
 
 import Foundation
 import Cocoa
+import OSLog
+
+private let logger = Logger(
+    subsystem: Logging.subsystem,
+    category: Logging.Category.Database.rawValue
+)
 
 class Database {
     static let instance = Database()
@@ -22,7 +28,7 @@ class Database {
                 .fetch(fetchRequest)
                 .sorted()
         } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
+            logger.error("Could not fetch. \(error, privacy: .public), \(error.userInfo, privacy: .public)")
             return []
         }
     }
@@ -53,7 +59,7 @@ class Database {
         do {
             try managedContext.save()
         } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
+            logger.error("Could not save. \(error, privacy: .public), \(error.userInfo, privacy: .public)")
         }
         
         return imageDescriptors

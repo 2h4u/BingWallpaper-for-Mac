@@ -1,4 +1,10 @@
 import Cocoa
+import OSLog
+
+private let logger = Logger(
+    subsystem: Logging.subsystem,
+    category: Logging.Category.Settings.rawValue
+)
 
 protocol SettingsVcDelegate: AnyObject {
     @MainActor
@@ -68,7 +74,7 @@ class SettingsVc: NSViewController {
     }
     
     @IBAction func resetDatabaseButtonAction(_ sender: NSButton) {
-        print("Resetting Database...")
+        logger.info("Resetting Database...")
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "YYYYMMdd"
         let oldestDateStringToKeep = dateFormatter.string(from: Date())
@@ -76,7 +82,7 @@ class SettingsVc: NSViewController {
         do {
            try Database.instance.deleteImageDescriptors(olderThan: oldestDateStringToKeep)
         } catch let error {
-            print("Failed resetting Database: \(error.localizedDescription)")
+            logger.error("Failed resetting Database: \(error.localizedDescription, privacy: .public)")
             let alert = NSAlert()
             alert.messageText = "Failed to reset Database"
             alert.informativeText = error.localizedDescription

@@ -7,6 +7,12 @@
 
 import Foundation
 import AppKit
+import OSLog
+
+private let logger = Logger(
+    subsystem: Logging.subsystem,
+    category: Logging.Category.AppUpdate.rawValue
+)
 
 class AppUpdateManager {
     
@@ -31,14 +37,14 @@ class AppUpdateManager {
     
     static func checkForUpdate(notifyUserAboutNoNewVersion:Bool = false) async {
         guard let latestGithubAppVersion = await fetchLatestAppVersionFromGithub() else {
-            print("Failed to fetch latest app version from github")
+            logger.error("Failed to fetch latest app version from github")
             return
         }
         
         let currentAppVersion = currentAppVersion()
         
         if newVersionAvailable(currentAppVersion, latestGithubAppVersion) == false {
-            print("No app update requiered, \(currentAppVersion) is alread the newest version")
+            logger.info("No app update required, \(currentAppVersion, privacy: .public) is already the newest version")
             
             if notifyUserAboutNoNewVersion == true {
                     await showAlreadyUpToDateDialog()
@@ -55,7 +61,7 @@ class AppUpdateManager {
         
         
         guard let pkgInstaller = await downloadLatestInstallerFromGithub(latestGithubAppVersion: latestGithubAppVersion) else {
-            print("Failed to download latest app installer from github")
+            logger.error("Failed to download latest app installer from github")
             return
         }
         

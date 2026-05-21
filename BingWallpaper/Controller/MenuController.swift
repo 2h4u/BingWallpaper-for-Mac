@@ -1,4 +1,10 @@
 import Cocoa
+import OSLog
+
+private let logger = Logger(
+    subsystem: Logging.subsystem,
+    category: Logging.Category.Menu.rawValue
+)
 
 class MenuController: NSObject {
     private var statusItem: NSStatusItem?
@@ -154,7 +160,7 @@ class MenuController: NSObject {
                     self?.imageSelectorView.imageView.image = NSImage(data: imageData)
                 }
             } catch {
-                print("Failed to load image from disk: \(descriptor)")
+                logger.error("Failed to load image from disk: \(String(describing: descriptor), privacy: .public)")
             }
         }
         

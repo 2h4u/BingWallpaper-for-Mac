@@ -1,10 +1,16 @@
 import AppKit
 import Foundation
+import OSLog
+
+private let logger = Logger(
+    subsystem: Logging.subsystem,
+    category: Logging.Category.FileHandler.rawValue
+)
 
 class FileHandler {
     static func usersPictureDirectory() -> String {
         guard let picturesDirectory = NSSearchPathForDirectoriesInDomains(.picturesDirectory, .userDomainMask, true).first else {
-            print("Couldn't find picture directory of user")
+            logger.error("Couldn't find picture directory of user")
             return FileManager.default.homeDirectoryForCurrentUser.path
         }
         
@@ -27,7 +33,7 @@ class FileHandler {
         do {
             try FileManager.default.createDirectory(atPath: bingDir, withIntermediateDirectories: false)
         } catch {
-            print("Failed to create bing-wallpapers folder with error:\n\(error)")
+            logger.error("Failed to create bing-wallpapers folder with error: \(error.localizedDescription, privacy: .public)")
         }
     }
     
@@ -39,7 +45,7 @@ class FileHandler {
         do {
             try imageData.write(to: toUrl, options: .withoutOverwriting)
         } catch {
-            print("Failed to save image to disk with error:\n\(error)")
+            logger.error("Failed to save image to disk with error: \(error.localizedDescription, privacy: .public)")
         }
     }
     
@@ -51,7 +57,7 @@ class FileHandler {
         do {
             return try FileManager.default.contentsOfDirectory(at: Settings().imageDownloadPath, includingPropertiesForKeys: nil, options: FileManager.DirectoryEnumerationOptions.skipsHiddenFiles)
         } catch {
-            print(error)
+            logger.error("Failed to list saved images: \(error.localizedDescription, privacy: .public)")
             return []
         }
     }
@@ -60,7 +66,7 @@ class FileHandler {
         do {
             return try FileManager.default.removeItem(at: imagePath)
         } catch {
-            print(error)
+            logger.error("Failed to remove image at \(imagePath.path, privacy: .public): \(error.localizedDescription, privacy: .public)")
             return
         }
     }
@@ -76,7 +82,7 @@ class FileHandler {
         do {
             try pkgInstaller.write(to: temporaryDirectoryUrl)
         } catch {
-            print("Failed to save pkg installer to disk with error:\n\(error)")
+            logger.error("Failed to save pkg installer to disk with error: \(error.localizedDescription, privacy: .public)")
             return nil
         }
         

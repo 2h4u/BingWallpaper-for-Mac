@@ -1,39 +1,65 @@
 import Foundation
 import AppKit
+import OSLog
+
+private let logger = Logger(
+    subsystem: Logging.subsystem,
+    category: Logging.Category.Update.rawValue
+)
 
 protocol UpdateManagerDelegate: AnyObject {
     @MainActor
     func downloadedNewImage()
 }
 
-class UpdateManager {
+final class UpdateManager: @unchecked Sendable {
+    private static let ACTIVITY_IDENTIFIER = "com.2h4u.BingWallpaper.update"
+
     weak var delegate: UpdateManagerDelegate?
     private let settings = Settings()
-    private var timer: Timer?
-    
-    @MainActor 
+    private var activity: NSBackgroundActivityScheduler?
+    private var pendingCompletion: NSBackgroundActivityScheduler.CompletionHandler?
+
+    @MainActor
     func start() {
         setupObserver()
-        doUpdateOrSetTimer()
+        doUpdateOrScheduleActivity()
     }
-    
-    @MainActor 
-    private func doUpdateOrSetTimer() {
+
+    @MainActor
+    private func doUpdateOrScheduleActivity() {
         if UpdateScheduleManager.isUpdateNecessary() {
             update()
             return
         }
-        
+
+        scheduleNextActivity()
+    }
+
+    @MainActor
+    private func scheduleNextActivity() {
         let nextFetchInterval = UpdateScheduleManager.nextFetchTimeInterval()
-        print("Currently no update necessary, next update at \(Date().addingTimeInterval(nextFetchInterval))")
-        
-        timer = Timer.scheduledTimer(
-            timeInterval: nextFetchInterval,
-            target: self,
-            selector: #selector(update),
-            userInfo: nil,
-            repeats: false
-        )
+        logger.info("Currently no update necessary, next update at \(Date().addingTimeInterval(nextFetchInterval), privacy: .public)")
+
+        activity?.invalidate()
+
+        let scheduler = NSBackgroundActivityScheduler(identifier: UpdateManager.ACTIVITY_IDENTIFIER)
+        scheduler.repeats = false
+        scheduler.interval = nextFetchInterval
+        scheduler.tolerance = min(nextFetchInterval / 2, 60 * 30)
+        scheduler.qualityOfService = .utility
+        scheduler.schedule { completion in
+            Task { @MainActor [weak self] in
+                guard let self = self else {
+                    completion(.finished)
+                    return
+                }
+                self.pendingCompletion = completion
+                self.update()
+            }
+        }
+
+        activity = scheduler
     }
         
     @MainActor
@@ -64,7 +90,7 @@ class UpdateManager {
     
     @MainActor
     @objc func update() {
-        print("Updating")
+        logger.info("Updating")
         settings.lastUpdate = Date()
         
         Task { [weak self] in
@@ -73,7 +99,14 @@ class UpdateManager {
             do {
                 imageEntries = try await DownloadManager.downloadImageEntries(numberOfImages: 8)
             } catch {
-                print("Failed to download image entries with error: \(error.localizedDescription)")
+                logger.error("Failed to download image entries with error: \(error.localizedDescription, privacy: .public)")
+                await MainActor.run { [weak self] in
+                    guard let self = self else { return }
+                    let completion = self.pendingCompletion
+                    self.pendingCompletion = nil
+                    completion?(.deferred)
+                    self.scheduleNextActivity()
+                }
                 return
             }
             
@@ -86,7 +119,7 @@ class UpdateManager {
                 do {
                     try await descriptor.image.downloadAndSaveToDisk()
                 } catch {
-                    print("Failed to download and store image \(descriptor.imageUrl) with error: \(error.localizedDescription)")
+                    logger.error("Failed to download and store image \(descriptor.imageUrl, privacy: .public) with error: \(error.localizedDescription, privacy: .public)")
                 }
             }
             
@@ -96,28 +129,23 @@ class UpdateManager {
                 if newDescriptors.isEmpty == false {
                     self.delegate?.downloadedNewImage()
                 }
-                let fetchInterval = UpdateScheduleManager.nextFetchTimeInterval()
-                print("Update complete, next update at \(Date().addingTimeInterval(fetchInterval))")
-                
-                self.timer?.invalidate()
-                self.timer = Timer.scheduledTimer(
-                    timeInterval: fetchInterval,
-                    target: self,
-                    selector: #selector(self.update),
-                    userInfo: nil,
-                    repeats: false
-                )
+
+                let completion = self.pendingCompletion
+                self.pendingCompletion = nil
+                completion?(.finished)
+
+                self.scheduleNextActivity()
             }
         }
     }
     
-    @MainActor 
+    @MainActor
     @objc func receiveSleepNote(note: NSNotification) {
-        timer?.invalidate()
+        activity?.invalidate()
     }
-    
-    @MainActor 
+
+    @MainActor
     @objc func receiveWakeNote(note: NSNotification) {
-        doUpdateOrSetTimer()
+        doUpdateOrScheduleActivity()
     }
 }

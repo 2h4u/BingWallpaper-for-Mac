@@ -1,5 +1,11 @@
 import AppKit
 import Foundation
+import OSLog
+
+private let logger = Logger(
+    subsystem: Logging.subsystem,
+    category: Logging.Category.Wallpaper.rawValue
+)
 
 class WallpaperManager {
     private var imageDescriptor: ImageDescriptor?
@@ -47,7 +53,7 @@ class WallpaperManager {
                 try workspace.setDesktopImageURL(imageUrl, for: screen, options: [:])
             }
         } catch {
-            print(error)
+            logger.error("Failed to set desktop image: \(error.localizedDescription, privacy: .public)")
         }
     }
 }
