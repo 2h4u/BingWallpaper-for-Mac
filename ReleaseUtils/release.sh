@@ -14,7 +14,10 @@ cd ../../
 
 # PKG
 cd ./build/Release/
-pkgbuild --root BingWallpaper.app --scripts ../../ReleaseUtils/ --install-location /Applications/BingWallpaper.app ../../BingWallpaper_latest.pkg
+pkgbuild --component BingWallpaper.app \
+         --scripts ../../ReleaseUtils/ \
+         --install-location /Applications \
+         ../../BingWallpaper_latest.pkg
 cd ../../
 
 echo "Done"
