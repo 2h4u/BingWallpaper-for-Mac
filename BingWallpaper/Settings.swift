@@ -1,3 +1,4 @@
+
 import Foundation
 import ServiceManagement
 import OSLog
@@ -14,21 +15,43 @@ public class Settings {
         migrateLegacyLoginItemIfNeeded()
     }
 
+    /// `true` when the user's intent is "launch at login enabled".
+    ///
+    /// On macOS 15+/26 the system frequently keeps a freshly registered login
+    /// item in `.requiresApproval` until the user confirms it in
+    /// System Settings → General → Login Items. We treat that as "on" so the
+    /// checkbox doesn't snap back to off the instant the user toggles it.
     var launchAtLogin: Bool {
-        get {
-            return SMAppService.mainApp.status == .enabled
+        switch SMAppService.mainApp.status {
+        case .enabled, .requiresApproval:
+            return true
+        case .notRegistered, .notFound:
+            return false
+        @unknown default:
+            return false
         }
-        set {
-            do {
-                if newValue {
-                    try SMAppService.mainApp.register()
-                } else {
-                    try SMAppService.mainApp.unregister()
-                }
-            } catch {
-                let actionString = newValue ? "register" : "unregister"
-                logger.error("Failed to \(actionString, privacy: .public) login item with error: \(String(describing: error), privacy: .public)")
+    }
+
+    /// `true` when the login item is registered but waiting for the user to
+    /// approve it in System Settings. Callers should route the user there.
+    var launchAtLoginRequiresApproval: Bool {
+        return SMAppService.mainApp.status == .requiresApproval
+    }
+
+    /// Register or unregister the main app as a login item. Throws on failure
+    /// so the caller can surface the error to the user instead of swallowing
+    /// it.
+    func setLaunchAtLogin(_ newValue: Bool) throws {
+        do {
+            if newValue {
+                try SMAppService.mainApp.register()
+            } else {
+                try SMAppService.mainApp.unregister()
             }
+        } catch {
+            let actionString = newValue ? "register" : "unregister"
+            logger.error("Failed to \(actionString, privacy: .public) login item with error: \(String(describing: error), privacy: .public)")
+            throw error
         }
     }
 

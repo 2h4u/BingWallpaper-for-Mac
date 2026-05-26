@@ -1,5 +1,6 @@
 import Cocoa
 import OSLog
+import ServiceManagement
 
 private let logger = Logger(
     subsystem: Logging.subsystem,
@@ -28,19 +29,38 @@ class SettingsVc: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        launchAtLoginCheckBox.state = settings.launchAtLogin ? .on : .off
+        refreshLaunchAtLoginCheckbox()
         hideMenuBarIconCheckBox.state = settings.hideMenuBarIcon ? .on : .off
         imagePathButton.title = settings.imageDownloadPath.path
         imagePathButton.toolTip = imagePathButton.title
         keepImagesSlider.integerValue = settings.keepImageDuration
         setKeepImagesText()
     }
-    
+
+    override func viewWillAppear() {
+        super.viewWillAppear()
+        refreshLaunchAtLoginCheckbox()
+    }
+
     // MARK: - Actions
-    
+
     @IBAction func launchAtLoginAction(_ sender: NSButton) {
         let newState = sender.state == .on
-        settings.launchAtLogin = newState
+        do {
+            try settings.setLaunchAtLogin(newState)
+        } catch {
+            logger.error("Failed to toggle launch-at-login: \(String(describing: error), privacy: .public)")
+            refreshLaunchAtLoginCheckbox()
+            presentLaunchAtLoginError(error)
+            return
+        }
+
+        // Sync the checkbox to the real status 
+        refreshLaunchAtLoginCheckbox()
+
+        if newState, settings.launchAtLoginRequiresApproval {
+            promptToApproveLoginItem()
+        }
     }
     
     @IBAction func hideMenuBarIconCheckBoxAction(_ sender: NSButton) {
@@ -96,7 +116,34 @@ class SettingsVc: NSViewController {
     }
     
     // MARK: - Private
-    
+
+    private func refreshLaunchAtLoginCheckbox() {
+        launchAtLoginCheckBox.state = settings.launchAtLogin ? .on : .off
+    }
+
+    private func promptToApproveLoginItem() {
+        let alert = NSAlert()
+        alert.messageText = "Approve BingWallpaper in Login Items"
+        alert.informativeText = "BingWallpaper has been added to your Login Items but macOS needs your approval before it can launch at login. Open System Settings to confirm it."
+        alert.alertStyle = .informational
+        let openButton = alert.addButton(withTitle: "Open Login Items")
+        alert.addButton(withTitle: "Later")
+        alert.window.defaultButtonCell = openButton.cell as? NSButtonCell
+
+        if alert.runModal() == .alertFirstButtonReturn {
+            SMAppService.openSystemSettingsLoginItems()
+        }
+    }
+
+    private func presentLaunchAtLoginError(_ error: Error) {
+        let alert = NSAlert()
+        alert.messageText = "Couldn't update Launch at Login"
+        alert.informativeText = error.localizedDescription
+        alert.alertStyle = .warning
+        alert.addButton(withTitle: "Ok")
+        alert.runModal()
+    }
+
     private func setKeepImagesText() {
         guard let keepImageDuration = KeepImageDuration(rawValue: settings.keepImageDuration) else { return }
         
