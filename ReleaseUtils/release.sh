@@ -5,7 +5,7 @@ if [ -f "release.sh" ]; then
 fi
 
 # Build
-xcodebuild clean build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO -target BingWallpaperHelper -target BingWallpaper
+xcodebuild clean build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO -target BingWallpaper
 
 # ZIP
 cd ./build/Release/
