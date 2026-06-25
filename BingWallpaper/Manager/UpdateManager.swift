@@ -19,6 +19,10 @@ final class UpdateManager: @unchecked Sendable {
     private let settings = Settings()
     private var activity: NSBackgroundActivityScheduler?
     private var pendingCompletion: NSBackgroundActivityScheduler.CompletionHandler?
+    private var consecutiveFailures = 0
+
+    private static let RETRY_BASE_INTERVAL: TimeInterval = 30
+    private static let RETRY_MAX_INTERVAL: TimeInterval = 30 * 60
 
     @MainActor
     func start() {
@@ -37,9 +41,9 @@ final class UpdateManager: @unchecked Sendable {
     }
 
     @MainActor
-    private func scheduleNextActivity() {
-        let nextFetchInterval = UpdateScheduleManager.nextFetchTimeInterval()
-        logger.info("Currently no update necessary, next update at \(Date().addingTimeInterval(nextFetchInterval), privacy: .public)")
+    private func scheduleNextActivity(overrideInterval: TimeInterval? = nil) {
+        let nextFetchInterval = overrideInterval ?? UpdateScheduleManager.nextFetchTimeInterval()
+        logger.info("Next update at \(Date().addingTimeInterval(nextFetchInterval), privacy: .public)")
 
         activity?.invalidate()
 
@@ -91,10 +95,9 @@ final class UpdateManager: @unchecked Sendable {
     @MainActor
     @objc func update() {
         logger.info("Updating")
-        settings.lastUpdate = Date()
-        
+
         Task { [weak self] in
-            
+
             let imageEntries: [DownloadManager.ImageEntry]
             do {
                 imageEntries = try await DownloadManager.downloadImageEntries(numberOfImages: 8)
@@ -105,16 +108,16 @@ final class UpdateManager: @unchecked Sendable {
                     let completion = self.pendingCompletion
                     self.pendingCompletion = nil
                     completion?(.deferred)
-                    self.scheduleNextActivity()
+                    self.scheduleRetryAfterFailure()
                 }
                 return
             }
-            
+
            let descriptors = Database.instance.updateImageDescriptors(from: imageEntries)
-            
+
            let newDescriptors = descriptors
                 .filter { $0.image.isOnDisk() == false }
-            
+
             for descriptor in newDescriptors {
                 do {
                     try await descriptor.image.downloadAndSaveToDisk()
@@ -122,9 +125,11 @@ final class UpdateManager: @unchecked Sendable {
                     logger.error("Failed to download and store image \(descriptor.imageUrl, privacy: .public) with error: \(error.localizedDescription, privacy: .public)")
                 }
             }
-            
+
             await MainActor.run { [weak self] in
                 guard let self = self else { return }
+                self.settings.lastUpdate = Date()
+                self.consecutiveFailures = 0
                 self.cleanup()
                 if newDescriptors.isEmpty == false {
                     self.delegate?.downloadedNewImage()
@@ -137,6 +142,18 @@ final class UpdateManager: @unchecked Sendable {
                 self.scheduleNextActivity()
             }
         }
+    }
+
+    @MainActor
+    private func scheduleRetryAfterFailure() {
+        consecutiveFailures += 1
+        let exponent = min(consecutiveFailures - 1, 10)
+        let backoff = min(
+            UpdateManager.RETRY_BASE_INTERVAL * pow(2.0, Double(exponent)),
+            UpdateManager.RETRY_MAX_INTERVAL
+        )
+        logger.info("Update failed (\(self.consecutiveFailures, privacy: .public) in a row), retrying in \(backoff, privacy: .public)s")
+        scheduleNextActivity(overrideInterval: backoff)
     }
     
     @MainActor
