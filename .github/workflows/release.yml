@@ -1,0 +1,72 @@
+name: Release
+
+# Triggered by pushing a version tag, e.g.:
+#   git tag v0.5.0 && git push origin v0.5.0
+#
+# The version is taken from the tag name (v0.5.0 -> 0.5.0) and injected into the
+# Release build. The repo's MARKETING_VERSION in project.pbxproj is intentionally
+# NOT modified/committed back — the tag is the source of truth for the build.
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write # required to create the GitHub Release
+
+jobs:
+  release:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Derive version from tag
+        id: version
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Building version $VERSION (build ${GITHUB_RUN_NUMBER})"
+
+      - name: Build (Release, unsigned)
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          xcodebuild clean build \
+            -project BingWallpaper.xcodeproj \
+            -target BingWallpaper \
+            -configuration Release \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            MARKETING_VERSION="$VERSION" \
+            CURRENT_PROJECT_VERSION="${GITHUB_RUN_NUMBER}"
+
+      - name: Create .zip and .pkg
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          cd ./build/Release/
+
+          # ZIP
+          zip -r "../../BingWallpaper_${VERSION}.zip" ./BingWallpaper.app
+
+          # PKG (uses preinstall/postinstall from ReleaseUtils)
+          pkgbuild --component BingWallpaper.app \
+                   --scripts ../../ReleaseUtils/ \
+                   --install-location /Applications \
+                   "../../BingWallpaper_${VERSION}.pkg"
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          gh release create "$GITHUB_REF_NAME" \
+            --title "v${VERSION}" \
+            --generate-notes \
+            "BingWallpaper_${VERSION}.zip" \
+            "BingWallpaper_${VERSION}.pkg"
