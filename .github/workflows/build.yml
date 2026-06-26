@@ -1,0 +1,29 @@
+name: Build Check
+
+# Non-publishing build to catch breakage before you tag a release.
+# Runs the same Release build as the release workflow, minus packaging/publishing.
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build (Release, unsigned)
+        run: |
+          set -euo pipefail
+          xcodebuild clean build \
+            -project BingWallpaper.xcodeproj \
+            -target BingWallpaper \
+            -configuration Release \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO
